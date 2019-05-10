@@ -19,10 +19,10 @@ app.get('/shards', (req, res) => {
             shardids.forEach(id => {
                 shards[id] = {"guilds": shardguilds[id]};
             })
+            res.header({"Content-Type":"application/json"})
+            res.status(200).send(shards)
         })
     })
-    res.header({"Content-Type":"application/json"})
-    res.status(200).send(shards)
 })
 
 app.get('/shard/:shardid', (req, res) => {
@@ -33,10 +33,10 @@ app.get('/shard/:shardid', (req, res) => {
             shardids.forEach(id => {
                 shard = {"guilds": shardguilds[id]};
             })
+            res.header({"Content-Type":"application/json"})
+            res.status(200).send(shard)
         })
     })
-    res.header({"Content-Type":"application/json"})
-    res.status(200).send(shard)
 })
 
 app.listen(17002, () => {
