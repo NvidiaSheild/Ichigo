@@ -25,20 +25,6 @@ app.get('/shards', (req, res) => {
     })
 })
 
-app.get('/shard/:shardid', (req, res) => {
-    let shard_id_given = parseInt(req.params.shardid)
-    ShardingManager.fetchClientValues('shard.id').then(shardids => {
-        if(!shardids[shard_id_given]) return res.header({"Content-Type": "application/json"}).status(404).send({"message": "shard not found"})
-        ShardingManager.fetchClientValues('guilds.size').then(shardguilds => {
-            shardids.forEach(id => {
-                shard = {"guilds": shardguilds[id]};
-            })
-            res.header({"Content-Type":"application/json"})
-            res.status(200).send(shard)
-        })
-    })
-})
-
 app.listen(17002, () => {
     console.log("Ichigo Web API running.")
 })
