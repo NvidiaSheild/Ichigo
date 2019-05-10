@@ -25,6 +25,21 @@ app.get('/shards', (req, res) => {
     })
 })
 
+app.get('/commands', (req, res) => {
+    let commands = {}
+    files = fs.readdirSync(`${process.cwd()}/commands/`)
+    files.forEach(file => {
+        let cmd = require(`../commands/${file}`).info
+        commands[file.split(".")[0]] = {
+            name: cmd.name,
+            desc: cmd.description,
+            example: cmd.example,
+            type: cmd.type
+        }
+    });
+    res.header({"Content-Type": "application/json"}).status(200).send(commands)
+})
+
 app.listen(17002, () => {
     console.log("Ichigo Web API running.")
 })
