@@ -30,7 +30,7 @@ app.get('/commands', (req, res) => {
     let commands = {}
     files = fs.readdirSync(`${process.cwd()}/commands/`)
     files.forEach(file => {
-        let cmd = require(`../commands/${file}`).info
+        let cmd = require(`./commands/${file}`).info
         commands[file.split(".")[0]] = {
             name: cmd.name,
             desc: cmd.description,
