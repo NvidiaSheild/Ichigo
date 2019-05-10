@@ -1,5 +1,6 @@
 const discord = require('discord.js');
 const settings = require('./settings');
+const fs = require('fs');
 const app = require('express')();
 const ShardingManager = new discord.ShardingManager('./ichigo.js', options={
     totalShards: 'auto',
