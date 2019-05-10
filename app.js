@@ -37,6 +37,7 @@ app.get('/commands', (req, res) => {
             example: cmd.example,
             type: cmd.type
         }
+        delete require.cache[require.resolve(`./commands/${file}`)]
     });
     res.header({"Content-Type": "application/json"}).status(200).send(commands)
 })
