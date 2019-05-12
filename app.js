@@ -7,6 +7,7 @@ const ShardingManager = new discord.ShardingManager('./ichigo.js', options={
     respawn: true,
     token: settings.token
 })
+const request = require('request')
 ShardingManager.spawn()
 
 app.get('/', (req, res) => {
@@ -45,3 +46,17 @@ app.get('/commands', (req, res) => {
 app.listen(17002, () => {
     console.log("Ichigo Web API running.")
 })
+
+setInterval(() => {
+    ShardingManager.fetchClientValues('guilds.size').then(shardguilds => {
+        request.post("https://discordbots.org/bots/575977933492191232/stats", {
+            headers: {
+                "Authorization": settings.dbl_token
+            },
+            body: {
+                "shards": shardguilds,
+                "shard_count": ShardingManager.shards.size
+            }
+        })        
+    })
+}, 600000);

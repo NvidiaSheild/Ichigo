@@ -4,3 +4,4 @@ exports.eval_users = [ "IDs are strings" ];
 exports.weebsh = "";
 exports.vote_lock = false;
 exports.guild_update_webhook = "";
+exports.dbl_token = "";
