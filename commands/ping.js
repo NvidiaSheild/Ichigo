@@ -5,5 +5,6 @@ exports.run = (client, msg, args, server_settings) => {
 exports.info = {
     "name": "ping",
     "type": "basic",
-    "description": "get the ping of the current shard."
+    "description": "get the ping of the current shard.",
+    "example": "ping"
 }

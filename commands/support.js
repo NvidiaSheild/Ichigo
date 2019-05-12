@@ -8,5 +8,6 @@ exports.run = (client, msg, args, server_settings) => {
 exports.info = {
     "name": "support",
     "description": "invite link for the support server",
-    "type": "basic"
+    "type": "basic",
+    "example": "support"
 }

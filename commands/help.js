@@ -24,5 +24,6 @@ exports.run = (client, msg, args, server_settings) => {
 exports.info = {
     "name": "help",
     "type": "basic",
-    "description": "get the available commands for the bot."
+    "description": "get the available commands for the bot.",
+    "example": "help [basic/moderator/admin]"
 }

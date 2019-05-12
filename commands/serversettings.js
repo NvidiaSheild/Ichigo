@@ -20,5 +20,6 @@ exports.run = (client, msg, args, server_settings) => {
 exports.info = {
         "name": "serversettings",
         "type": "basic",
-        "description": "get the current guild settings."
+        "description": "get the current guild settings.",
+        "example": "serversettings"
 }

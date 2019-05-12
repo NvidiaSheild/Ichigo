@@ -49,5 +49,6 @@ exports.run = (client, msg) => {
 exports.info = {
     "name": "status",
     "type": "basic",
-    "description": "gives the shard statuses of the bot."
+    "description": "gives the shard statuses of the bot.",
+    "example": "status"
 }
