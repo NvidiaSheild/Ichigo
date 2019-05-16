@@ -39,11 +39,11 @@ exports.run = (client, msg) => {
                             text += shardstat + "\n";
                         });
                         return msg.channel.send(text, {code: 'prolog'})
-                    });
-                });
-            });
-        });
-    });
+                    }).catch();
+                }).catch();
+            }).catch();
+        }).catch();
+    }).catch();
 };
 
 exports.info = {

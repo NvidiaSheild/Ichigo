@@ -14,7 +14,7 @@ exports.handle = (client, msg, server_settings) => {
                 if(settings.vote_lock) {
                     if (cmd.info.votelocked) {
                         database.user_has_voted(msg.author.id).then(bool => {
-                            if(bool == false) {
+                            if(bool == "false") {
                                 let embed = new discord.RichEmbed().addField("You are required to vote to use this command.", "[Click here to be taken to the vote page.](https://discordbots.org/bot/575977933492191232/vote)")
                                 return msg.channel.send(embed)
                             } else { 
@@ -44,7 +44,7 @@ exports.handle = (client, msg, server_settings) => {
                                 if(settings.vote_lock) {
                                     if (cmd.info.votelocked) {
                                         database.user_has_voted(msg.author.id).then(bool => {
-                                            if(bool == false) {
+                                            if(bool == "false") {
                                                 let embed = new discord.RichEmbed().addField("You are required to vote to use this command.", "[Click here to be taken to the vote page.](https://discordbots.org/bot/575977933492191232/vote)")
                                                 return msg.channel.send(embed)
                                             } else { 
@@ -76,7 +76,7 @@ exports.handle = (client, msg, server_settings) => {
                 if(settings.vote_lock) {
                     if (cmd.info.votelocked) {
                         database.user_has_voted(msg.author.id).then(bool => {
-                            if(bool == false) {
+                            if(bool == "false") {
                                 let embed = new discord.RichEmbed().addField("You are required to vote to use this command.", "[Click here to be taken to the vote page.](https://discordbots.org/bot/575977933492191232/vote)")
                                 return msg.channel.send(embed)
                             } else { 
@@ -106,7 +106,7 @@ exports.handle = (client, msg, server_settings) => {
                                 if(settings.vote_lock) {
                                     if (cmd.info.votelocked) {
                                         database.user_has_voted(msg.author.id).then(bool => {
-                                            if(bool == false) {
+                                            if(bool == "false") {
                                                 let embed = new discord.RichEmbed().addField("You are required to vote to use this command.", "[Click here to be taken to the vote page.](https://discordbots.org/bot/575977933492191232/vote)")
                                                 return msg.channel.send(embed)
                                             } else { 

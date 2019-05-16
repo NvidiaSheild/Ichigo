@@ -13,5 +13,6 @@ exports.info = {
     "name": "zalgo",
     "description": "make your text somewhat unreadable",
     "example": "zalgo [text]",
-    "type": "basic"
+    "type": "basic",
+    "votelocked": true 
 }

@@ -11,5 +11,6 @@ exports.info = {
     "name": "pat",
     "description": "pat someone on the nose",
     "example": "pat [person]",
-    "type": "basic"
+    "type": "basic",
+    "votelocked": true
 }

@@ -35,5 +35,6 @@ exports.info = {
     "name": "tsundere",
     "description": "ichigo lets her true feelings out",
     "example": "tsundere",
-    "type": "basic"
+    "type": "basic",
+    "votelocked": true
 }
