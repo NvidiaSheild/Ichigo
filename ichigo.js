@@ -31,6 +31,8 @@ client.on('message', (msg) => {
 })
 
 client.on('ready', () => {
+    const dbl = require('discord-bot-list');
+    const dblc = new dbl({ token: settings.dbl_token, id: "575977933492191232" })
     client.logs.info(`Shard ${client.shard.id} Ready`);
     client.options.disableEveryone = true
     load_all_commands(client)
@@ -41,6 +43,32 @@ client.on('ready', () => {
         client.user.setStatus("dnd")
         client.user.setPresence({game: { name:`${settings.default_prefix} help | Shard ${client.shard.id} [${client.guilds.size}]`}}).then().catch()
     }, 15000);
+
+    let guilds = 0;
+    client.shard.fetchClientValues('guilds.size').then(shardguilds => {
+        let shards = client.shard.count;
+        shardguilds.map(g => guilds += g)
+        dblc.postStats(guilds, (err, res) => {
+            if (err) {
+                client.logs.debug("Error with dbl DBL");
+            }
+            client.logs.debug("DBL Server Count posted: " + `[Guilds: ${guilds}]`)
+        })
+    })
+
+    setInterval(() => {
+        let guilds = 0;
+        client.shard.fetchClientValues('guilds.size').then(shardguilds => {
+            let shards = client.shard.count;
+            shardguilds.map(g => guilds += g)
+            dblc.postStats(guilds, (err, res) => {
+                if (err) {
+                    client.logs.debug("Error with dbl DBL");
+                }
+                client.logs.debug("DBL Server Count posted: " + `[Guilds: ${guilds}]`)
+            })
+        })
+    }, 600000);
 });
 
 client.on('guildCreate', (guild) => {
@@ -72,7 +100,7 @@ client.on('reconnecting', () => {
     client.logs.info(`Shard ${client.shard.id} Reconnecting...`);
 });
 
-client.on('connected', () => {
+client.on('resume', () => {
     client.logs.info(`Shard ${client.shard.id} Connected`);
 });
 
