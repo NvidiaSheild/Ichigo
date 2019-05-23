@@ -66,7 +66,7 @@ exports.user_has_voted = (id) => {
         this.server_data = {}
         request.get(`http://192.168.0.250:8080/hasVoted/${id}`, (err, res, body) => {
             if (res.statusCode == 404) {
-                resolve(false)
+                resolve("false")
             } else if (res.statusCode == 200) {
                 resolve(body)
             }
