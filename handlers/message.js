@@ -5,10 +5,10 @@ let database = require('./database')
 
 exports.handle = (client, msg, server_settings) => {
     if (msg.author.bot) return;
-    let cleaned_content = msg.content.replace("/ +/g", " ")
-    if (cleaned_content.substr(0, server_settings.prefix.length) == server_settings.prefix) {
-        let command_name = cleaned_content.substr(server_settings.prefix.length).trim().split(" ")[0]
-        let args = cleaned_content.substr(server_settings.prefix.length).trim().split(" ").splice(1)
+    let cleaned_content = msg.content.replace(/[ ]+/g, " ")
+    if (cleaned_content.split(" ")[0].toLowerCase() == server_settings.prefix.toLowerCase()) {
+        let command_name = cleaned_content.substr(server_settings.prefix.length).trim().split(" ")[0].toLowerCase()
+        let args = cleaned_content.split(" ").splice(2)
         command.fetch(command_name).then(cmd => {
             try {
                 if(settings.vote_lock) {
