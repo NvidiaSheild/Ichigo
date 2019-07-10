@@ -7,7 +7,7 @@ let generate_message = (client, shard_ids, guild_sizes, memusagemb, uptimes, tab
             function secondsToDhms(d) {
                 d = Number(d);
                 var days = Math.floor(d / 86400);
-                var hrs = Math.floor(d / 3600);
+                var hrs = Math.floor((d / 3600) % 24);
                 var mins = Math.floor(d % 3600 / 60);
                 var secs = Math.floor(d % 60);
                 var days_txt = days.toString().padStart(2, "0")
