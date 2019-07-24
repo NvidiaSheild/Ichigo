@@ -118,6 +118,7 @@ exports.handle = (client, msg, server_settings) => {
                                     }
                                 } else {
                                     cmd.run(client, msg, args, server_settings)
+                                    
                                 }
                             } catch (e) {
                                 return client.logs.error(e)
