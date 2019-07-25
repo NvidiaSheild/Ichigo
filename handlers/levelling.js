@@ -14,7 +14,7 @@ exports.handle_global = (guild, user) => {
                 last_gained_xp: 0
             })
         } else {
-            let needed_xp = 1024 * Math.pow(_user.level, _user.level)
+            let needed_xp = 256 * Math.pow(_user.level, _user.level)
             let user_xp = _user.current_xp;
             let last_xp = _user.last_gained_xp - Date.now();
             let xp_boost = _user.xp_boost ? _user.xp_boost : false;
@@ -75,7 +75,7 @@ exports.handle_guild = (msg, guild, user) => {
                 last_gained_xp: 0
             })
         } else {
-            let needed_xp = 1024 * Math.pow(_user.level, _user.level)
+            let needed_xp = 256 * Math.pow(_user.level, _user.level)
             let user_xp = _user.current_xp;
             let last_xp = _user.last_gained_xp - Date.now();
             let xp_boost = _user.xp_boost ? _user.xp_boost : false;
@@ -96,17 +96,17 @@ exports.handle_guild = (msg, guild, user) => {
                     database.getServer(msg.guild.id).then(server => {
                         let server_data = JSON.parse(server)
                         if (server_data.leveldms == true && _user.leveldms == true) {
-                            user.send(`[${guild.name}] Congrats you leveled up to Level ${level}!\nYou can toggle this message by running \`@Ichigo userleveldms\` in a server with Ichigo`)
+                            user.send(`[${guild.name}] Congrats you leveled up to Level ${level}!\nYou can toggle this message by running \`@Ichigo userleveldms\` in a server with Ichigo\n or ask a moderator to do \`@Ichigo leveldms\``)
                         } else if (server_data.leveldms == false && _user.leveldms == true) {
-                            user.send(`[${guild.name}] Congrats you leveled up to Level ${level}!\nYou can toggle this message by running \`@Ichigo userleveldms\` in a server with Ichigo`)
+                            user.send(`[${guild.name}] Congrats you leveled up to Level ${level}!\nYou can toggle this message by running \`@Ichigo userleveldms\` in a server with Ichigo\n or ask a moderator to do \`@Ichigo leveldms\``)
                         } else if (server_data.leveldms == true && _user.leveldms == false) {
                             return
                         } else if (server_data.leveldms == undefined && _user.leveldms == true) {
-                            user.send(`[${guild.name}] Congrats you leveled up to Level ${level}!\nYou can toggle this message by running \`@Ichigo userleveldms\` in a server with Ichigo`)
+                            user.send(`[${guild.name}] Congrats you leveled up to Level ${level}!\nYou can toggle this message by running \`@Ichigo userleveldms\` in a server with Ichigo\n or ask a moderator to do \`@Ichigo leveldms\``)
                         } else if (server_data.leveldms == true && _user.leveldms == undefined) {
-                            user.send(`[${guild.name}] Congrats you leveled up to Level ${level}!\nYou can toggle this message by running \`@Ichigo userleveldms\` in a server with Ichigo`)
+                            user.send(`[${guild.name}] Congrats you leveled up to Level ${level}!\nYou can toggle this message by running \`@Ichigo userleveldms\` in a server with Ichigo\n or ask a moderator to do \`@Ichigo leveldms\``)
                         } else if (server_data.leveldms == undefined && _user.leveldms == undefined) {
-                            user.send(`[${guild.name}] Congrats you leveled up to Level ${level}!\nYou can toggle this message by running \`@Ichigo userleveldms\` in a server with Ichigo`)
+                            user.send(`[${guild.name}] Congrats you leveled up to Level ${level}!\nYou can toggle this message by running \`@Ichigo userleveldms\` in a server with Ichigo\n or ask a moderator to do \`@Ichigo leveldms\``)
                         } else return
                     })
                 } else {
