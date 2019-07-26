@@ -34,20 +34,7 @@ client.on('message', (msg) => {
     setTimeout(() => {
         levelling_handler.handle_guild(msg, msg.guild, msg.author)
         levelling_handler.handle_global(msg.guild, msg.author)
-    }, 1000)
-     user_obj = {
-         username: msg.author.username,
-         discrim: msg.author.discriminator,
-         avatar: msg.author.avatar
-     }
-     database.get_user(msg.author.id, user_obj).then(user_data => {
-         _user_data = JSON.parse(user_data);
-         if (_user_data.username == user_obj.username && _user_data.discrim == user_obj.discrim && _user_data.avatar == user_obj.avatar) {
-             return
-         } else {
-             database.update_user(msg.author.id, user_obj).catch()
-         }
-     }).catch()
+    }, 200)
 })
 
 client.on('ready', () => {
