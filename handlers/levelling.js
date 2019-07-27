@@ -73,7 +73,7 @@ exports.handle_guild = (msg, guild, user) => {
                 current_xp: 0,
                 total_xp: 0,
                 last_gained_xp: 0
-            })
+            }).catch()
         } else {
             let needed_xp = 256 * Math.pow(_user.level, _user.level)
             let user_xp = _user.current_xp;
@@ -119,7 +119,7 @@ exports.handle_guild = (msg, guild, user) => {
                     current_xp: current_xp_total,
                     total_xp: final_xp_total,
                     last_gained_xp: time
-                })
+                }).catch()
             }
         }
     })
