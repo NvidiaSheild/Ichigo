@@ -26,8 +26,8 @@ exports.run = (client, msg, args, server_settings) => {
 }
 
 exports.info = {
-    "name": "leveldm",
+    "name": "leveldms",
     "description": "toggle the dm message for levelling up [PER GUILD]",
     "type": "moderator",
-    "example": "leveldm"
+    "example": "leveldms"
 }

@@ -1,4 +1,5 @@
 const discord = require('discord.js');
+const request = require('request');
 const database = require('./handlers/database');
 const message_handler = require('./handlers/message');
 const levelling_handler = require('./handlers/levelling');
@@ -52,29 +53,51 @@ client.on('ready', () => {
     }, 15000);
 
     let guilds = 0;
+    let shards = client.shard.count;
     client.shard.fetchClientValues('guilds.size').then(shardguilds => {
-        let shards = client.shard.count;
         shardguilds.map(g => guilds += g)
-        dblc.postStats(guilds, (err, res) => {
-            if (err) {
-                client.logs.debug("Error with dbl DBL");
+    }).then(() => {
+        request.post('https://discordbots.org/api/bots/575977933492191232/stats', {
+            form: {
+                "server_count": guilds,
+                "shard_count": shards
+            },
+            json: true,
+            headers: {
+                "Authorization": settings.dbl_token
             }
-            client.logs.debug("DBL Server Count posted: " + `[Guilds: ${guilds}]`)
+        }, (err, res, body) => {
+            if (res.statusCode == 200) {
+                client.logs.debug(`DBL Post Successful [${guilds} Guilds, ${shards} Shard]`)
+            } else {
+                client.logs.error("Issue with DBL POST")
+            }
         })
     })
 
     setInterval(() => {
         let guilds = 0;
         client.shard.fetchClientValues('guilds.size').then(shardguilds => {
-            let shards = client.shard.count;
             shardguilds.map(g => guilds += g)
-            dblc.postStats(guilds, (err, res) => {
-                if (err) {
-                    client.logs.debug("Error with dbl DBL");
+        }).then(() => {
+            request.post('https://discordbots.org/api/bots/575977933492191232/stats', {
+                form: {
+                    "server_count": guilds,
+                    "shard_count": shards
+                },
+                json: true,
+                headers: {
+                    "Authorization": settings.dbl_token
                 }
-                client.logs.debug("DBL Server Count posted: " + `[Guilds: ${guilds}]`)
+            }, (err, res, body) => {
+                if (res.statusCode == 200) {
+                    client.logs.debug(`DBL Post Successful [${guilds} Guilds, ${shards} Shard]`)
+                } else {
+                    client.logs.error("Issue with DBL POST")
+                }
             })
         })
+    
     }, 600000);
 });
 
