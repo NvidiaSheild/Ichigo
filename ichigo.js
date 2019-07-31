@@ -36,6 +36,7 @@ client.on('message', (msg) => {
         levelling_handler.handle_guild(msg, msg.guild, msg.author)
         levelling_handler.handle_global(msg.guild, msg.author)
     }, 200)
+    
 })
 
 client.on('ready', () => {

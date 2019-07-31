@@ -8,18 +8,18 @@ exports.run = (client, msg, args, server_settings) => {
             database.update_user(msg.author.id, {
                 "leveldms": false
             })
-            msg.channel.send("I wont dm you when you level up.\nYou can toggle this themselves by using the `userleveldms` command")
+            msg.channel.send("I wont dm you when you level up.\nYou can toggle this again by using the `userleveldms` command")
         }
         else if (leveldmstoggle == false) {
             database.update_user(msg.author.id, {
                 "leveldms": true
             })
-            msg.channel.send("I will now dm you when they level up.\nYou can toggle this themselves by using the `userleveldms` command")
+            msg.channel.send("I will now dm you when they level up.\nYou can toggle this again by using the `userleveldms` command")
         } else if (leveldmstoggle == true) {
             database.update_user(msg.author.id, {
                 "leveldms": false
             })
-            msg.channel.send("I wont dm you when you level up.\nYou can toggle this themselves by using the `userleveldms` command")
+            msg.channel.send("I wont dm you when you level up.\nYou can toggle this again by using the `userleveldms` command")
         }
     })
 }
