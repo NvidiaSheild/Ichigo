@@ -11,7 +11,7 @@ exports.run = (client, msg, args, server_settings) => {
     if(!settings.eval_users.includes(msg.author.id)) return;
     const code = args.join(' ');
     exec(code).then(output => {
-        msg.channel.send('```js\n' + clean(output.stdout) + '\n```');
+        msg.channel.send(clean(output.stdout), {split: true, code:"js"});
     }).catch((stderr) => {
         msg.channel.send(`\`ERROR\` \`\`\`xl\n${stderr}\n\`\`\``);
     });
