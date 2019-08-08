@@ -18,6 +18,7 @@ String.prototype.capitalize = function () {
 client.on('message', (msg) => {
     if (msg.author.bot) return;
     if (!msg.guild) return;
+    if(!msg.guild.member(client.user.id).permissions.has("SEND_MESSAGES")) return;
     database.getServer(msg.guild.id).then(server_settings => {
         server_settings = JSON.parse(server_settings)
         if (!server_settings.prefix) {
@@ -164,6 +165,11 @@ client.on('userUpdate', (user_before, user) => {
  * 
  */
 
-client.on('error', (err) => { return });
+client.on('error', (err) => {
+    client.logs.warn(err);
+});
+
+process.on('unhandledRejection', err => client.logs.debug(err))
+process.on('uncaughtException', err => client.logs.debug(err))
 
 client.login();
