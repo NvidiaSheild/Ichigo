@@ -22,10 +22,10 @@ let generate_message = (client, shard_ids, guild_sizes, memusagemb, uptimes, tab
         let output = [];
         shard_ids.forEach(shard_id => {
             output.push({ "shard": shard_id, "message": `\`\`\`prolog
-CURRENT:    ${(client.shard.id == shard_id).toString().toUpperCase()}
-GUILDS:     ${guild_sizes[shard_id]}
-RAM:        ${memusagemb[shard_id]}MBs
-UPTIME:     ${secondsToDhms(uptimes[shard_id])}\`\`\`` })
+CURRENT:  ${(client.shard.id == shard_id).toString().toUpperCase()}
+GUILDS:   ${guild_sizes[shard_id]}
+RAM:      ${memusagemb[shard_id]}MBs
+UPTIME:   ${secondsToDhms(uptimes[shard_id])}\`\`\`` })
         });
         resolve(output);
     });
@@ -45,9 +45,9 @@ exports.run = (client, msg) => {
                                 embed.addField(`[Shard ${shard.shard}] Statistics:`, shard.message, inline = false)
                             });
                             embed.addField("System Information:", `\`\`\`xl
-System CPU Usage:   ${Math.round(percent)}%
-System RAM Usage:   ${Math.round(mem.total - mem.free)}MB (${Math.round(mem.usedPercent)}%) / ${Math.round(mem.total)}MB (100%)
-System Uptime:      ${ secondsToDhms(os.uptime())}\`\`\``)
+System CPU Usage: ${Math.round(percent)}%
+System RAM Usage: ${Math.round(mem.total - mem.free)}MB (${Math.round(mem.usedPercent)}%) / ${Math.round(mem.total)}MB (100%)
+System Uptime:    ${ secondsToDhms(os.uptime())}\`\`\``)
                             return msg.channel.send({ embed })
                         });
                     }).catch();

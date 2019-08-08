@@ -59,7 +59,7 @@ client.on('ready', () => {
     }, 15000);
 
     client.shard.fetchClientValues('guilds.size').then(shardguilds => {
-        shards = [0];
+        shards = [];
         shardguilds.map(s => shards.push(s))
         request.post('https://discordbots.org/api/bots/575977933492191232/stats', {
             body: {
@@ -79,14 +79,12 @@ client.on('ready', () => {
     })
 
     setInterval(() => {
-        let guilds = 0;
         client.shard.fetchClientValues('guilds.size').then(shardguilds => {
-            shardguilds.map(g => guilds += g)
-        }).then(() => {
+            shards = [];
+            shardguilds.map(s => shards.push(s))
             request.post('https://discordbots.org/api/bots/575977933492191232/stats', {
-                form: {
-                    "server_count": guilds,
-                    "shard_count": shards
+                body: {
+                    "shards": shards
                 },
                 json: true,
                 headers: {
@@ -94,9 +92,9 @@ client.on('ready', () => {
                 }
             }, (err, res, body) => {
                 if (res.statusCode == 200) {
-                    client.logs.debug(`DBL Post Successful [${guilds} Guilds, ${shards} Shard]`)
+                    client.logs.debug(`DBL Post Successful [${shards} Guilds, ${client.shard.count} Shards]`)
                 } else {
-                    client.logs.error("Issue with DBL POST")
+                    client.logs.error("Issue with DBL POST:\n")
                 }
             })
         })
