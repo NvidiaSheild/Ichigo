@@ -17,7 +17,11 @@ String.prototype.capitalize = function () {
 
 client.on('message', (msg) => {
     if (msg.author.bot) return;
-    if (!msg.guild) return;
+    if (!msg.guild) {
+        if (msg.author.bot) {
+            client.logs.debug(`${msg.author.tag} responds to other bots, in dms`)
+        }
+    };
     if (!msg.guild.member(client.user.id).permissions.has("SEND_MESSAGES")) return;
     database.getServer(msg.guild.id).then(server_settings => {
         server_settings = JSON.parse(server_settings)
@@ -54,15 +58,13 @@ client.on('ready', () => {
         client.user.setPresence({ game: { name: `${settings.default_prefix} help | Shard ${client.shard.id} [${client.guilds.size}]` } }).then().catch()
     }, 15000);
 
-    let guilds = 0;
-    let shards = client.shard.count;
     client.shard.fetchClientValues('guilds.size').then(shardguilds => {
-        shardguilds.map(g => guilds += g)
-    }).then(() => {
+        shards = [0];
+        shardguilds.map(s => shards.push(s))
         request.post('https://discordbots.org/api/bots/575977933492191232/stats', {
-            form: {
-                "server_count": guilds,
-                "shard_count": shards
+            body: {
+                "shards": shards,
+                "shard_count": client.shard.count
             },
             json: true,
             headers: {
@@ -70,9 +72,9 @@ client.on('ready', () => {
             }
         }, (err, res, body) => {
             if (res.statusCode == 200) {
-                client.logs.debug(`DBL Post Successful [${guilds} Guilds, ${shards} Shard]`)
+                client.logs.debug(`DBL Post Successful [${shards} Guilds, ${client.shard.count} Shards]`)
             } else {
-                client.logs.error("Issue with DBL POST")
+                client.logs.error("Issue with DBL POST:\n")
             }
         })
     })
@@ -124,12 +126,12 @@ client.on('guildCreate', (guild) => {
     })
     let embed = new discord.RichEmbed()
         .setThumbnail(guild.iconURL)
-        .addField(`Joined Guild:`,`${guild.name}`)
-        .addField(`Total Members:`,`${guild.memberCount} Members (${bots} Bots) (${users} Humans)`)
+        .addField(`Joined Guild:`, `${guild.name}`)
+        .addField(`Total Members:`, `${guild.memberCount} Members (${bots} Bots) (${users} Humans)`)
         .addField(`Shard ${client.shard.id}:`, `Currently in ${client.guilds.size}`)
         .setColor('#7289da')
     client.fetchWebhook("576013440150405140", "FzeavqiL0CHcshzTYif2PJOoaBnzToCZaS1wyiUf8YQiWX_h3iouPFna896vI1QzGccd").then(webhook => {
-        webhook.send(embed=embed)
+        webhook.send(embed = embed)
     })
 })
 
@@ -145,12 +147,12 @@ client.on('guildDelete', guild => {
     })
     let embed = new discord.RichEmbed()
         .setThumbnail(guild.iconURL)
-        .addField(`Left Guild:`,`${guild.name}`)
-        .addField(`Total Members:`,`${guild.memberCount} Members (${bots} Bots) (${users} Humans)`)
+        .addField(`Left Guild:`, `${guild.name}`)
+        .addField(`Total Members:`, `${guild.memberCount} Members (${bots} Bots) (${users} Humans)`)
         .addField(`Shard ${client.shard.id}:`, `Currently in ${client.guilds.size}`)
         .setColor('#7289da')
     client.fetchWebhook("576013440150405140", "FzeavqiL0CHcshzTYif2PJOoaBnzToCZaS1wyiUf8YQiWX_h3iouPFna896vI1QzGccd").then(webhook => {
-        webhook.send(embed=embed)
+        webhook.send(embed = embed)
     })
 })
 
