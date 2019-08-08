@@ -169,7 +169,13 @@ client.on('error', (err) => {
     client.logs.warn(err);
 });
 
-process.on('unhandledRejection', err => client.logs.debug(err))
-process.on('uncaughtException', err => client.logs.debug(err))
+process.on('unhandledRejection', err => {
+    if(err.name == "ECONNRESET") return client.logs.debug("Ignoring 'Socket Hang up' error");
+    client.logs.debug(err)
+});
+process.on('uncaughtException', err => {
+    if(err.name == "ECONNRESET") return client.logs.debug("Ignoring 'Socket Hang up' error");
+    client.logs.debug(err)
+})
 
 client.login();
