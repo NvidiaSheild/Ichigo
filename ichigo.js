@@ -63,8 +63,7 @@ client.on('ready', () => {
         shardguilds.map(s => shards.push(s))
         request.post('https://discordbots.org/api/bots/575977933492191232/stats', {
             body: {
-                "shards": shards,
-                "shard_count": client.shard.count
+                "shards": shards
             },
             json: true,
             headers: {
