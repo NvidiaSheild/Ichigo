@@ -18,7 +18,7 @@ String.prototype.capitalize = function () {
 client.on('message', (msg) => {
     if (msg.author.bot) return;
     if (!msg.guild) return;
-    if(!msg.guild.member(client.user.id).permissions.has("SEND_MESSAGES")) return;
+    if (!msg.guild.member(client.user.id).permissions.has("SEND_MESSAGES")) return;
     database.getServer(msg.guild.id).then(server_settings => {
         server_settings = JSON.parse(server_settings)
         if (!server_settings.prefix) {
@@ -37,7 +37,7 @@ client.on('message', (msg) => {
         levelling_handler.handle_guild(msg, msg.guild, msg.author)
         levelling_handler.handle_global(msg.guild, msg.author)
     }, 200)
-    
+
 })
 
 client.on('ready', () => {
@@ -99,7 +99,7 @@ client.on('ready', () => {
                 }
             })
         })
-    
+
     }, 600000);
 });
 
@@ -113,14 +113,44 @@ client.on('guildCreate', (guild) => {
             })
         }
     })
+    let bots = 0;
+    let users = 0;
+    guild.members.map(u => {
+        if (u.user.bot) {
+            bots++
+        } else {
+            users++
+        }
+    })
+    let embed = new discord.RichEmbed()
+        .setThumbnail(guild.iconURL)
+        .addField(`Joined Guild:`,`${guild.name}`)
+        .addField(`Total Members:`,`${guild.memberCount} Members (${bots} Bots) (${users} Humans)`)
+        .addField(`Shard ${client.shard.id}:`, `Currently in ${client.guilds.size}`)
+        .setColor('#7289da')
     client.fetchWebhook("576013440150405140", "FzeavqiL0CHcshzTYif2PJOoaBnzToCZaS1wyiUf8YQiWX_h3iouPFna896vI1QzGccd").then(webhook => {
-        webhook.send(`Ichigo just joined **${guild.name}** (${guild.memberCount} Members) [Shard ${client.shard.id} now in ${client.guilds.size} guilds]`)
+        webhook.send(embed=embed)
     })
 })
 
 client.on('guildDelete', guild => {
+    let bots = 0;
+    let users = 0;
+    guild.members.map(u => {
+        if (u.user.bot) {
+            bots++
+        } else {
+            users++
+        }
+    })
+    let embed = new discord.RichEmbed()
+        .setThumbnail(guild.iconURL)
+        .addField(`Left Guild:`,`${guild.name}`)
+        .addField(`Total Members:`,`${guild.memberCount} Members (${bots} Bots) (${users} Humans)`)
+        .addField(`Shard ${client.shard.id}:`, `Currently in ${client.guilds.size}`)
+        .setColor('#7289da')
     client.fetchWebhook("576013440150405140", "FzeavqiL0CHcshzTYif2PJOoaBnzToCZaS1wyiUf8YQiWX_h3iouPFna896vI1QzGccd").then(webhook => {
-        webhook.send(`Ichigo just left **${guild.name}** (${guild.memberCount} Members) [Shard ${client.shard.id} now in ${client.guilds.size} guilds]`)
+        webhook.send(embed=embed)
     })
 })
 
@@ -170,11 +200,11 @@ client.on('error', (err) => {
 });
 
 process.on('unhandledRejection', err => {
-    if(err.name == "ECONNRESET") return client.logs.debug("Ignoring 'Socket Hang up' error");
+    if (err.name == "ECONNRESET") return client.logs.debug("Ignoring 'Socket Hang up' error");
     client.logs.debug(err)
 });
 process.on('uncaughtException', err => {
-    if(err.name == "ECONNRESET") return client.logs.debug("Ignoring 'Socket Hang up' error");
+    if (err.name == "ECONNRESET") return client.logs.debug("Ignoring 'Socket Hang up' error");
     client.logs.debug(err)
 })
 
