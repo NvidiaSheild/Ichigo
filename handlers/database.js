@@ -132,7 +132,7 @@ exports.get_user_from_guild = (user_id, guild_id) => {
         request.get(`http://192.168.0.250:9090/server/${guild_id}/user/${user_id}`, (err, res, body) => {
             if (err) {
                 reject(err);
-            } else if (res.statusCode == 404 || res.statusCode == 500) {
+            } else if (!res || res.statusCode == 404 || res.statusCode == 500) {
                 request.post(`http://192.168.0.250:9090/server/${guild_id}/adduser/${user_id}`, {
                     headers: {
                         "authorization": settings.token
@@ -156,7 +156,7 @@ exports.edit_user_on_guild = (user_id, guild_id, new_data) => {
                 "authorization": settings.token
             }
         }, (err, res, body) => {
-            if (res.statusCode == 404) {
+            if (!res || res.statusCode == 404) {
                 exports.get_user_from_guild(user_id, guild_id);
                 request.post(`http://192.168.0.250:9090/server/${guild_id}/adduser/${user_id}`, {
                     json: new_data,
