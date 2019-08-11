@@ -130,6 +130,9 @@ client.on('guildCreate', (guild) => {
     client.fetchWebhook("576013440150405140", "FzeavqiL0CHcshzTYif2PJOoaBnzToCZaS1wyiUf8YQiWX_h3iouPFna896vI1QzGccd").then(webhook => {
         webhook.send(embed = embed)
     })
+    client.fetchWebhook("610042274474229760", "8EJ-FMvlXT48ZwdYeVskraULxTHgQRNKlrtkYOpflcAsWoyrtl___uDNTK7xmQK-TiiY").then(webhook => {
+        webhook.send(embed = embed)
+    })
 })
 
 client.on('guildDelete', guild => {
@@ -149,6 +152,9 @@ client.on('guildDelete', guild => {
         .addField(`Shard ${client.shard.id}:`, `Currently in ${client.guilds.size}`)
         .setColor('#7289da')
     client.fetchWebhook("576013440150405140", "FzeavqiL0CHcshzTYif2PJOoaBnzToCZaS1wyiUf8YQiWX_h3iouPFna896vI1QzGccd").then(webhook => {
+        webhook.send(embed = embed)
+    })
+    client.fetchWebhook("610042274474229760", "8EJ-FMvlXT48ZwdYeVskraULxTHgQRNKlrtkYOpflcAsWoyrtl___uDNTK7xmQK-TiiY").then(webhook => {
         webhook.send(embed = embed)
     })
 })
