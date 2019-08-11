@@ -59,7 +59,7 @@ client.on('ready', () => {
     }, 15000);
 
     client.shard.fetchClientValues('guilds.size').then(shardguilds => {
-        shards = [];
+        let shards = [];
         shardguilds.map(s => shards.push(s))
         request.post('https://discordbots.org/api/bots/575977933492191232/stats', {
             body: {
@@ -80,7 +80,7 @@ client.on('ready', () => {
 
     setInterval(() => {
         client.shard.fetchClientValues('guilds.size').then(shardguilds => {
-            shards = [];
+            let shards = [];
             shardguilds.map(s => shards.push(s))
             request.post('https://discordbots.org/api/bots/575977933492191232/stats', {
                 body: {
@@ -195,7 +195,8 @@ client.on('userUpdate', (user_before, user) => {
  */
 
 client.on('error', (err) => {
-    client.logs.warn(err);
+    if(err.name == "ECONNRESET") return client.logs.debug("Ignoring 'Socket Hang up' error");
+    client.logs.debug(err);
 });
 
 process.on('unhandledRejection', err => {
