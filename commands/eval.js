@@ -13,6 +13,7 @@ exports.run = (client, msg, args, server_settings) => {
         const code = msg.content.split(" ").slice(2).join(" ");
         let evaled = eval(code);
         if (typeof evaled !== "string")
+          
           evaled = require("util").inspect(evaled);
         msg.channel.send(clean(evaled), {split: true, code:"xl"});
     } catch (err) {
