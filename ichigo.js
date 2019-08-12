@@ -6,7 +6,9 @@ const levelling_handler = require('./handlers/levelling');
 const load_all_commands = require('./handlers/command').load_all;
 const auto_role = require('./handlers/auto_role');
 const settings = require('./settings.js');
-const client = new discord.Client();
+const client = new discord.Client({
+    "disableEveryone": true
+});
 const log = require('color-logs')(true, true, "Ichigo");
 
 client.logs = log
@@ -46,7 +48,6 @@ client.on('message', (msg) => {
 
 client.on('ready', () => {
     client.logs.info(`Shard ${client.shard.id} Ready`);
-    client.options.disableEveryone = true
     load_all_commands(client)
     client.user.setStatus("online")
     client.logs.debug(`Shard ${client.shard.id} | Presence set`)
