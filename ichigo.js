@@ -45,8 +45,6 @@ client.on('message', (msg) => {
 })
 
 client.on('ready', () => {
-    const dbl = require('discord-bot-list');
-    const dblc = new dbl({ token: settings.dbl_token, id: "575977933492191232" })
     client.logs.info(`Shard ${client.shard.id} Ready`);
     client.options.disableEveryone = true
     load_all_commands(client)
