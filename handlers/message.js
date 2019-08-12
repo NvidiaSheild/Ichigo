@@ -20,20 +20,20 @@ exports.handle = (client, msg, server_settings) => {
                             } else {
                                 cmd.run(client, msg, args, server_settings)
                                 let embed = new discord.RichEmbed().addField("Want to support the bot?", "[Vote for Ichigo](https://discordbots.org/bot/575977933492191232/vote)\n[Pledge on Patreon](https://www.patreon.com/Discord_Ichigo)").setColor('#7289da')
-                                setTimeout(()=> {msg.channel.send({ embed })}, 500)
+                                //setTimeout(()=> {msg.channel.send({ embed })}, 500)
 
                             }
                         })
                     } else {
                         cmd.run(client, msg, args, server_settings)
                         let embed = new discord.RichEmbed().addField("Want to support the bot?", "[Vote for Ichigo](https://discordbots.org/bot/575977933492191232/vote)\n[Pledge on Patreon](https://www.patreon.com/Discord_Ichigo)").setColor('#7289da')
-                        setTimeout(()=> {msg.channel.send({ embed })}, 500)
+                        //setTimeout(()=> {msg.channel.send({ embed })}, 500)
 
                     }
                 } else {
                     cmd.run(client, msg, args, server_settings)
                     let embed = new discord.RichEmbed().addField("Want to support the bot?", "[Vote for Ichigo](https://discordbots.org/bot/575977933492191232/vote)\n[Pledge on Patreon](https://www.patreon.com/Discord_Ichigo)").setColor('#7289da')
-                    setTimeout(()=> {msg.channel.send({ embed })}, 500)
+                    //setTimeout(()=> {msg.channel.send({ embed })}, 500)
                 }
             } catch (e) {
                 return client.logs.error(e)
@@ -58,18 +58,18 @@ exports.handle = (client, msg, server_settings) => {
                                             } else {
                                                 cmd.run(client, msg, args, server_settings)
                                                 let embed = new discord.RichEmbed().addField("Want to support the bot?", "[Vote for Ichigo](https://discordbots.org/bot/575977933492191232/vote)\n[Pledge on Patreon](https://www.patreon.com/Discord_Ichigo)").setColor('#7289da')
-                                                setTimeout(()=> {msg.channel.send({ embed })}, 500)
+                                                //setTimeout(()=> {msg.channel.send({ embed })}, 500)
                                             }
                                         })
                                     } else {
                                         cmd.run(client, msg, args, server_settings)
                                         let embed = new discord.RichEmbed().addField("Want to support the bot?", "[Vote for Ichigo](https://discordbots.org/bot/575977933492191232/vote)\n[Pledge on Patreon](https://www.patreon.com/Discord_Ichigo)").setColor('#7289da')
-                                        setTimeout(()=> {msg.channel.send({ embed })}, 500)
+                                        //setTimeout(()=> {msg.channel.send({ embed })}, 500)
                                     }
                                 } else {
                                     cmd.run(client, msg, args, server_settings)
                                     let embed = new discord.RichEmbed().addField("Want to support the bot?", "[Vote for Ichigo](https://discordbots.org/bot/575977933492191232/vote)\n[Pledge on Patreon](https://www.patreon.com/Discord_Ichigo)").setColor('#7289da')
-                                    setTimeout(()=> {msg.channel.send({ embed })}, 500)
+                                    //setTimeout(()=> {msg.channel.send({ embed })}, 500)
                                 }
                             } catch (e) {
                                 return client.logs.error(e)
@@ -97,18 +97,18 @@ exports.handle = (client, msg, server_settings) => {
                             } else {
                                 cmd.run(client, msg, args, server_settings)
                                 let embed = new discord.RichEmbed().addField("Want to support the bot?", "[Vote for Ichigo](https://discordbots.org/bot/575977933492191232/vote)\n[Pledge on Patreon](https://www.patreon.com/Discord_Ichigo)").setColor('#7289da')
-                                setTimeout(()=> {msg.channel.send({ embed })}, 500)
+                                //setTimeout(()=> {msg.channel.send({ embed })}, 500)
                             }
                         })
                     } else {
                         cmd.run(client, msg, args, server_settings)
                         let embed = new discord.RichEmbed().addField("Want to support the bot?", "[Vote for Ichigo](https://discordbots.org/bot/575977933492191232/vote)\n[Pledge on Patreon](https://www.patreon.com/Discord_Ichigo)").setColor('#7289da')
-                        setTimeout(()=> {msg.channel.send({ embed })}, 500)
+                        //setTimeout(()=> {msg.channel.send({ embed })}, 500)
                     }
                 } else {
                     cmd.run(client, msg, args, server_settings)
                     let embed = new discord.RichEmbed().addField("Want to support the bot?", "[Vote for Ichigo](https://discordbots.org/bot/575977933492191232/vote)\n[Pledge on Patreon](https://www.patreon.com/Discord_Ichigo)").setColor('#7289da')
-                    setTimeout(()=> {msg.channel.send({ embed })}, 500)
+                    //setTimeout(()=> {msg.channel.send({ embed })}, 500)
                 }
             } catch (e) {
                 return client.logs.error(e)
@@ -133,18 +133,18 @@ exports.handle = (client, msg, server_settings) => {
                                             } else {
                                                 cmd.run(client, msg, args, server_settings)
                                                 let embed = new discord.RichEmbed().addField("Want to support the bot?", "[Vote for Ichigo](https://discordbots.org/bot/575977933492191232/vote)\n[Pledge on Patreon](https://www.patreon.com/Discord_Ichigo)").setColor('#7289da')
-                                                setTimeout(()=> {msg.channel.send({ embed })}, 500)
+                                                //setTimeout(()=> {msg.channel.send({ embed })}, 500)
                                             }
                                         })
                                     } else {
                                         cmd.run(client, msg, args, server_settings)
                                         let embed = new discord.RichEmbed().addField("Want to support the bot?", "[Vote for Ichigo](https://discordbots.org/bot/575977933492191232/vote)\n[Pledge on Patreon](https://www.patreon.com/Discord_Ichigo)").setColor('#7289da')
-                                        setTimeout(()=> {msg.channel.send({ embed })}, 500)
+                                        //setTimeout(()=> {msg.channel.send({ embed })}, 500)
                                     }
                                 } else {
                                     cmd.run(client, msg, args, server_settings)
                                     let embed = new discord.RichEmbed().addField("Want to support the bot?", "[Vote for Ichigo](https://discordbots.org/bot/575977933492191232/vote)\n[Pledge on Patreon](https://www.patreon.com/Discord_Ichigo)").setColor('#7289da')
-                                    setTimeout(()=> {msg.channel.send({ embed })}, 500)
+                                    //setTimeout(()=> {msg.channel.send({ embed })}, 500)
 
                                 }
                             } catch (e) {
