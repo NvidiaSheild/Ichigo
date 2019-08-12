@@ -1,7 +1,6 @@
 {
   "dependencies": {
     "color-logs": "^0.6.1",
-    "discord-bot-list": "^1.0.1",
     "discord.js": "^11.5.0",
     "express": "^4.16.4",
     "request": "^2.88.0",

@@ -6,7 +6,9 @@ const levelling_handler = require('./handlers/levelling');
 const load_all_commands = require('./handlers/command').load_all;
 const auto_role = require('./handlers/auto_role');
 const settings = require('./settings.js');
-const client = new discord.Client();
+const client = new discord.Client({
+    "disableEveryone": true
+});
 const log = require('color-logs')(true, true, "Ichigo");
 
 client.logs = log
@@ -45,61 +47,44 @@ client.on('message', (msg) => {
 })
 
 client.on('ready', () => {
-    const dbl = require('discord-bot-list');
-    const dblc = new dbl({ token: settings.dbl_token, id: "575977933492191232" })
     client.logs.info(`Shard ${client.shard.id} Ready`);
-    client.options.disableEveryone = true
     load_all_commands(client)
-    client.user.setStatus("online")
-    client.logs.debug(`Shard ${client.shard.id} | Presence set`)
-    client.user.setPresence({ game: { name: `${settings.default_prefix} help | Shard ${client.shard.id} [${client.guilds.size}]` } }).then().catch()
-    setInterval(() => {
-        client.user.setStatus("online")
-        client.user.setPresence({ game: { name: `${settings.default_prefix} help | Shard ${client.shard.id} [${client.guilds.size}]` } }).then().catch()
-    }, 15000);
 
-    client.shard.fetchClientValues('guilds.size').then(shardguilds => {
-        let shards = [];
-        shardguilds.map(s => shards.push(s))
-        request.post('https://discordbots.org/api/bots/575977933492191232/stats', {
-            body: {
-                "shards": shards
-            },
-            json: true,
-            headers: {
-                "Authorization": settings.dbl_token
-            }
-        }, (err, res, body) => {
-            if (res.statusCode == 200) {
-                client.logs.debug(`DBL Post Successful [${shards} Guilds, ${client.shard.count} Shards]`)
-            } else {
-                client.logs.error("Issue with DBL POST:\n")
-            }
-        })
-    })
+    setBotPresence();
+    function setBotPresence() {
+        client.user.setPresence({ 
+            "game": { 
+                "name": `${settings.default_prefix} help | Shard ${client.shard.id} [${client.guilds.size}]`
+            } 
+        }).finally(() => {
+            setTimeout(setBotPresence, 15000);
+        });
+    }
 
-    setInterval(() => {
-        client.shard.fetchClientValues('guilds.size').then(shardguilds => {
-            let shards = [];
-            shardguilds.map(s => shards.push(s))
+    postDblStats();
+    function postDblStats() {
+        client.shard.fetchClientValues('guilds.size').then(results => {
+            let serverCount = results.reduce((prev, val) => prev + val, 0);
             request.post('https://discordbots.org/api/bots/575977933492191232/stats', {
                 body: {
-                    "shards": shards
+                    "shard_count": client.shard.count,
+                    "server_count": serverCount
                 },
                 json: true,
                 headers: {
                     "Authorization": settings.dbl_token
                 }
-            }, (err, res, body) => {
+            }, (err, res) => {
                 if (res.statusCode == 200) {
-                    client.logs.debug(`DBL Post Successful [${shards} Guilds, ${client.shard.count} Shards]`)
+                    client.logs.debug(`DBL Post Successful [${serverCount} Guilds, ${client.shard.count} Shards]`)
                 } else {
-                    client.logs.error("Issue with DBL POST:\n")
+                    client.logs.error("Issue with DBL POST.")
                 }
-            })
-        })
+                setTimeout(postDblStats, 600000);
+            });
+        });
+    }
 
-    }, 600000);
 });
 
 client.on('guildCreate', (guild) => {
