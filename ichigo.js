@@ -1,5 +1,8 @@
 const discord = require('discord.js');
+const cpustat = require('cpu-stat');
+const memstat = require('mem-stat');
 const request = require('request');
+const os = require('os');
 const database = require('./handlers/database');
 const message_handler = require('./handlers/message');
 const levelling_handler = require('./handlers/levelling');
@@ -49,13 +52,70 @@ client.on('message', (msg) => {
 client.on('ready', () => {
     client.logs.info(`Shard ${client.shard.id} Ready`);
     load_all_commands(client)
+    //message id -> 610974296323522560
+    updateStatus();
+    function secondsToDhms(d) {
+        d = Number(d);
+        var days = Math.floor(d / 86400);
+        var hrs = Math.floor((d / 3600) % 24);
+        var mins = Math.floor(d % 3600 / 60);
+        var secs = Math.floor(d % 60);
+        var days_txt = days.toString().padStart(2, "0")
+        var hrs_txt = hrs.toString().padStart(2, "0")
+        var mins_txt = mins.toString().padStart(2, "0");
+        var secs_txt = secs.toString().padStart(2, "0");
+
+        return `${days_txt}D ${hrs_txt}H ${mins_txt}M ${secs_txt}S`;
+    }
+    let generate_message = (client, shard_ids, guild_sizes, memusagemb, uptimes, tab_size) => {
+        return new Promise((resolve, reject) => {
+            let output = [];
+            shard_ids.forEach(shard_id => {
+                output.push({
+                    "shard": shard_id, "message": `\`\`\`prolog
+CURRENT:  ${(client.shard.id == shard_id).toString().toUpperCase()}
+GUILDS:   ${guild_sizes[shard_id]}
+RAM:      ${memusagemb[shard_id]}MBs
+UPTIME:   ${secondsToDhms(uptimes[shard_id])}\`\`\``
+                })
+            });
+            resolve(output);
+        });
+    };
+    function updateStatus() {
+        client.shard.fetchClientValues('shard.id').then(shard_ids => {
+            client.shard.fetchClientValues('guilds.size').then(guild_sizes => {
+                client.shard.broadcastEval('process.memoryUsage()').then(memusage => {
+                    client.shard.broadcastEval('Math.floor(process.uptime())').then(uptimes => {
+                        memusagemb = memusage.map(mem => (mem.heapUsed / (1024 * 1024)).toFixed(1))
+                        generate_message(client, shard_ids, guild_sizes, memusagemb, uptimes, 2).then(output => {
+                            let embed = new discord.RichEmbed().setColor('#7289da')
+                            let mem = memstat.allStats('MiB')
+                            let cpu = cpustat.usagePercent({ sampleMs: 200 }, (err, percent, seconds) => {
+                                output.map(shard => {
+                                    embed.addField(`[Shard ${shard.shard}] Statistics:`, shard.message, inline = false)
+                                });
+                                embed.addField("System Information:", `\`\`\`xl
+System CPU Usage: ${Math.round(percent)}%
+System RAM Usage: ${Math.round(mem.total - mem.free)}MB (${Math.round(mem.usedPercent)}%) / ${Math.round(mem.total)}MB (100%)
+System Uptime:    ${ secondsToDhms(os.uptime())}\`\`\``)
+                                embed.addField("Time of status update:", Date())
+                                return client.guilds.get('556013291378442240').channels.get('610294038704160798').fetchMessage('610974296323522560').then(m => m.edit({embed}));
+                            });
+                        }).catch();
+                    }).catch();
+                }).catch();
+            }).catch();
+        }).catch();
+        setInterval(updateStatus, 15000)
+    }
 
     setBotPresence();
     function setBotPresence() {
-        client.user.setPresence({ 
-            "game": { 
+        client.user.setPresence({
+            "game": {
                 "name": `${settings.default_prefix} help | Shard ${client.shard.id} [${client.guilds.size}]`
-            } 
+            }
         }).finally(() => {
             setTimeout(setBotPresence, 15000);
         });
@@ -186,7 +246,7 @@ client.on('userUpdate', (user_before, user) => {
  */
 
 client.on('error', (err) => {
-    if(err.name == "ECONNRESET") return client.logs.debug("Ignoring 'Socket Hang up' error");
+    if (err.name == "ECONNRESET") return client.logs.debug("Ignoring 'Socket Hang up' error");
     client.logs.debug(err);
 });
 
