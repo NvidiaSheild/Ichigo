@@ -1,4 +1,5 @@
 const fs = require('fs')
+const RichEmbed = require('discord.js').RichEmbed
 
 exports.run = (client, msg, args, server_settings) => {
     let help_catagory = args[0]
@@ -7,16 +8,22 @@ exports.run = (client, msg, args, server_settings) => {
     } else {
         /* I don't even remember how the fuck I conjured this up */
         command_files = fs.readdirSync(`${process.cwd()}/commands/`).map(command => command.split(".")[0])
-        let numbers = require('fs').readdirSync(`${process.cwd()}/commands/`).map(command => command.split(".")[0]).map(command_name => command_name.length); 
-        let largest = Math.max.apply(Math, numbers);
-        let output_text = "<Command>" + "<Description>\n".padStart(largest+11, " ")
-        let cmd_text = command_files.map(command => {
-            let cmd_info = require(`${process.cwd()}/commands/${command}`).info
-            if (!cmd_info) return;
-            if (cmd_info.type !== help_catagory) return;
-            output_text += `[${cmd_info.name.capitalize()}]`.padEnd(largest+6, " ") + `${cmd_info.description}\n`
-        });
-        return msg.channel.send(output_text, {split: true, code:"prolog"})
+        if(command_files.includes(help_catagory)) {
+            let cmd_info = require(`${process.cwd()}/commands/${help_catagory}.js`).info
+            let embed = new RichEmbed().addField("Command Name", cmd_info.name).addField("Command Decription", cmd_info.description).addField("Command Example", `\`\`\`${server_settings.prefix} ${cmd_info.example} \`\`\``)
+            return msg.channel.send(embed)
+        } else {
+            let numbers = require('fs').readdirSync(`${process.cwd()}/commands/`).map(command => command.split(".")[0]).map(command_name => command_name.length); 
+            let largest = Math.max.apply(Math, numbers);
+            let output_text = "<Command>" + "<Description>\n".padStart(largest+11, " ")
+            let cmd_text = command_files.map(command => {
+                let cmd_info = require(`${process.cwd()}/commands/${command}`).info
+                if (!cmd_info) return;
+                if (cmd_info.type !== help_catagory) return;
+                output_text += `[${cmd_info.name.capitalize()}]`.padEnd(largest+6, " ") + `${cmd_info.description}\n`
+            });
+            return msg.channel.send(output_text, {split: true, code:"prolog"})
+        }
     }
     
 }
