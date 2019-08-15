@@ -1,4 +1,6 @@
 exports.token = "";
+exports.couch_user = "";
+exports.couch_pass = "";
 exports.database = ""; //beta or live
 exports.default_prefix = "";
 exports.eval_users = [ "IDs are strings" ];
