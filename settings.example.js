@@ -1,4 +1,5 @@
 exports.token = "";
+exports.database = ""; //beta or live
 exports.default_prefix = "";
 exports.eval_users = [ "IDs are strings" ];
 exports.say_users = [ "IDs are strings" ];
