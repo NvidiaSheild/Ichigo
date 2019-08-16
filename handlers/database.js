@@ -89,8 +89,14 @@ exports.update_user = (id, new_data) => {
             user_settings.insert(insert, id).catch(e => console.log(e));
         }).catch(err => {
             if (err.message == "missing" || err.message == "deleted") {
-                user_settings.insert(new_data, id).catch(err => console.log(err));
-                resolve({});
+                user_settings.insert(new_data, id).then(out => {
+                    let {rev, id} = out
+                    let insert = extend({
+                        _rev: rev,
+                        _id: id
+                    }, new_data)
+                    resolve(insert);
+                }).catch(err => console.log(err));
             } else {
                 return resolve(err.message)
             }
@@ -105,8 +111,14 @@ exports.get_user = (id) => {
             resolve(response);
         }).catch(err => {
             if (err.message == "missing" || err.message == "deleted") {
-                user_settings.insert({}, id).catch(err => console.log(err));
-                resolve({});
+                user_settings.insert({}, id).then(out => {
+                    let {rev, id} = out
+                    let insert = {
+                        _rev: rev,
+                        _id: id
+                    }
+                    resolve(insert);
+                }).catch(err => console.log(err));;
             } else {
                 return resolve(err.message)
             }
