@@ -26,7 +26,6 @@ client.on('message', (msg) => {
     };
     if (!msg.guild.member(client.user.id).permissions.has("SEND_MESSAGES")) return;
     database.getServer(msg.guild.id).then(server_settings => {
-        server_settings = JSON.parse(server_settings)
         if (!server_settings.prefix) {
             database.updateServer(msg.guild.id, { "prefix": settings.default_prefix }).then(server_settings => {
                 message_handler.handle(client, msg, server_settings)
@@ -61,7 +60,7 @@ client.on('ready', () => {
         });
     }
 
-    postDblStats();
+    //postDblStats();
     function postDblStats() {
         client.shard.fetchClientValues('guilds.size').then(results => {
             let serverCount = results.reduce((prev, val) => prev + val, 0);
@@ -187,16 +186,16 @@ client.on('userUpdate', (user_before, user) => {
 
 client.on('error', (err) => {
     if (err.name == "ECONNRESET") return client.logs.debug("Ignoring 'Socket Hang up' error");
-    client.logs.debug(err);
+    client.logs.debug(err.stack);
 });
 
 process.on('unhandledRejection', err => {
     if (err.name == "ECONNRESET") return client.logs.debug("Ignoring 'Socket Hang up' error");
-    client.logs.debug(err)
+    client.logs.debug(err.stack)
 });
 process.on('uncaughtException', err => {
     if (err.name == "ECONNRESET") return client.logs.debug("Ignoring 'Socket Hang up' error");
-    client.logs.debug(err)
+    client.logs.debug(err.stack)
 })
 
 client.login();
