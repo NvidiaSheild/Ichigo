@@ -79,18 +79,21 @@ exports.get_user_votes = (id) => {
 exports.update_user = (id, new_data) => {
     return new Promise((resolve, reject) => {
         user_settings.get(id).then(response => {
+            let {_rev, _id} = response;
             let obj = response;
             delete obj._rev;
             delete obj._id;
             let insert = extend(new_data, obj);
-            insert['_rev'] = response._rev;
-            insert['_id'] = respond._id;
-            user_settings.insert(insert, id).catch(e => console.log(e));
+            insert['_rev'] = _rev;
+            insert['_id'] = _id;
+            user_settings.insert(insert, id).then(out => console.log(out)).catch(e => console.log(e));
         }).catch(err => {
             if (err.message == "missing" || err.message == "deleted") {
+                console.log("Hi2")
                 user_settings.insert(new_data, id).catch(err => console.log(err));
                 resolve({});
             } else {
+                console.log("Hi")
                 return resolve(err.message)
             }
         })
