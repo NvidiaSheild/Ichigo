@@ -19,11 +19,7 @@ String.prototype.capitalize = function () {
 
 client.on('message', (msg) => {
     if (msg.author.bot) return;
-    if (!msg.guild) {
-        if (msg.author.bot) {
-            client.logs.debug(`${msg.author.tag} responds to other bots, in dms`)
-        }
-    };
+    if (!msg.guild) return;
     if (!msg.guild.member(client.user.id).permissions.has("SEND_MESSAGES")) return;
     levelling_handler.handle_guild(msg, msg.guild, msg.author).then(done => {
         levelling_handler.handle_global(msg.guild, msg.author).then(done => {
@@ -62,7 +58,7 @@ client.on('ready', () => {
         });
     }
 
-    //postDblStats();
+    postDblStats();
     function postDblStats() {
         client.shard.fetchClientValues('guilds.size').then(results => {
             let serverCount = results.reduce((prev, val) => prev + val, 0);
