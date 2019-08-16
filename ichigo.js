@@ -25,23 +25,25 @@ client.on('message', (msg) => {
         }
     };
     if (!msg.guild.member(client.user.id).permissions.has("SEND_MESSAGES")) return;
-    database.getServer(msg.guild.id).then(server_settings => {
-        if (!server_settings.prefix) {
-            database.updateServer(msg.guild.id, { "prefix": settings.default_prefix }).then(server_settings => {
-                message_handler.handle(client, msg, server_settings)
+    levelling_handler.handle_guild(msg, msg.guild, msg.author).then(done => {
+        levelling_handler.handle_global(msg.guild, msg.author).then(done => {
+            database.getServer(msg.guild.id).then(server_settings => {
+                server_settings = server_settings;
+                if (!server_settings.prefix) {
+                    database.updateServer(msg.guild.id, { "prefix": settings.default_prefix }).finally(server_settings => {
+                        message_handler.handle(client, msg, server_settings)
+                    }).catch(err => {
+                        client.logs.error(err)
+                    })
+                } else {
+                    message_handler.handle(client, msg, server_settings)
+                }
             }).catch(err => {
                 client.logs.error(err)
-            })
-        } else {
-            message_handler.handle(client, msg, server_settings)
-        }
-    }).catch(err => {
-        client.logs.error(err)
-    });
-    setTimeout(() => {
-        levelling_handler.handle_guild(msg, msg.guild, msg.author)
-        levelling_handler.handle_global(msg.guild, msg.author)
-    }, 200)
+            });
+        }).catch(e => console.log(e))
+    }).catch(e => console.log(e))
+
 
 })
 

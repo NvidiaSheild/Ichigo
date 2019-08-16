@@ -62,9 +62,12 @@ exports.handle_global = (guild, user) => {
                         username: user.username,
                         discrim: user.discriminator,
                         avatar: user.avatar
-                    }).then(done => resolve(done))
+                    })
+                    
                 }
             }
+        }).finally(() => {
+            resolve(true)
         })
     })
 }
@@ -128,10 +131,12 @@ exports.handle_guild = (msg, guild, user) => {
                             username: user.username,
                             discrim: user.discriminator,
                             avatar: user.avatar
-                        }).then(done => resolve(done)).catch()
+                        })
                     }
                 }
             })
+        }).finally(() => {
+            resolve(true)
         })
     })
 }

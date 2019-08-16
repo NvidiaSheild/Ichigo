@@ -83,7 +83,7 @@ exports.update_user = (id, new_data) => {
             let obj = response;
             delete obj._rev;
             delete obj._id;
-            let insert = extend(new_data, obj);
+            let insert = extend(obj, new_data);
             insert['_rev'] = _rev;
             insert['_id'] = _id;
             user_settings.insert(insert, id).then(out => console.log(out)).catch(e => console.log(e));
