@@ -2,8 +2,7 @@ let database = require('../handlers/database');
 
 exports.run = (client, msg, args, server_settings) => {
     if (!msg.guild.member(msg.author.id).permissions.has("MANAGE_GUILD")) return msg.channel.send("You don't have permission to do this.");
-    database.getServer(msg.guild.id).then(server => {
-        let server_settings = JSON.parse(server)
+    database.getServer(msg.guild.id).then(server_settings => {
         let leveldmstoggle = server_settings.leveldms
         if (leveldmstoggle == undefined) {
             database.updateServer(msg.guild.id, {
