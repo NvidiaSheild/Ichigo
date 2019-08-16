@@ -5,8 +5,7 @@ let randomNum = (min, max) => { // min and max included
     return Math.floor(Math.random() * (max - min + 1) + min);
 }
 exports.handle_global = (guild, user) => {
-    database.get_user(user.id).then(user_data => {
-        let _user_settings = JSON.parse(user_data)
+    database.get_user(user.id).then(_user_settings => {
         if (!_user_settings.level) {
             database.update_user(user.id, {
                 level: 1,
@@ -70,10 +69,8 @@ exports.handle_global = (guild, user) => {
 }
 
 exports.handle_guild = (msg, guild, user) => {
-    database.get_user(user.id).then(user_settings => {
-        let _user_settings = JSON.parse(user_settings)
-        database.get_user_from_guild(user.id, guild.id).then(user_data => {
-            let _user = JSON.parse(user_data)
+    database.get_user(user.id).then(_user_settings => {
+        database.get_user_from_guild(user.id, guild.id).then(_user => {
             if (!_user.level) {
                 database.edit_user_on_guild(user.id, guild.id, {
                     level: 1,
