@@ -1,21 +1,19 @@
 let database = require('../handlers/database');
 
 exports.run = (client, msg, args, server_settings) => {
-    database.get_user(msg.author.id).then(user => {
-        let user_settings = JSON.parse(user)
-        let leveldmstoggle = user_settings.leveldms
-        if (leveldmstoggle == undefined) {
+    database.get_user(msg.author.id).then(user_settings => {
+        if (user_settings.leveldms == undefined) {
             database.update_user(msg.author.id, {
                 "leveldms": false
             })
             msg.channel.send("I wont dm you when you level up.\nYou can toggle this again by using the `userleveldms` command")
         }
-        else if (leveldmstoggle == false) {
+        else if (user_settings.leveldms == false) {
             database.update_user(msg.author.id, {
                 "leveldms": true
             })
             msg.channel.send("I will now dm you when they level up.\nYou can toggle this again by using the `userleveldms` command")
-        } else if (leveldmstoggle == true) {
+        } else if (user_settings.leveldms == true) {
             database.update_user(msg.author.id, {
                 "leveldms": false
             })

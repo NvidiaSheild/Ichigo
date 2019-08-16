@@ -79,12 +79,7 @@ exports.get_user_votes = (id) => {
 exports.update_user = (id, new_data) => {
     return new Promise((resolve, reject) => {
         user_settings.get(id).then(response => {
-            let obj = response;
-            delete obj._rev;
-            delete obj._id;
-            let insert = extend(new_data, obj);
-            insert['_rev'] = response._rev;
-            insert['_id'] = respond._id;
+            let insert = extend(new_data, response);
             user_settings.insert(insert, id).catch(e => console.log(e));
         }).catch(err => {
             if (err.message == "missing" || err.message == "deleted") {
