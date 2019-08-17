@@ -66,20 +66,16 @@ exports.updateServer = (id, new_data) => {
 exports.get_user_votes = (id) => {
     return new Promise((resolve, reject) => {
         this.server_data = {}
-        request.get(`http://192.168.0.250:8080/stats/${id}`, (err, res, body) => {
-            if (res.statusCode == 404) {
-                reject(Error("User doesnt exist."))
-            } else if (res.statusCode == 200) {
-                resolve(body)
-            }
-        });
+        user_votes.get(id).then(res => {
+            resolve(res)
+        })
     })
 }
 
 exports.update_user = (id, new_data) => {
     return new Promise((resolve, reject) => {
         user_settings.get(id).then(response => {
-            let {_rev, _id} = response;
+            let { _rev, _id } = response;
             let obj = response;
             delete obj._rev;
             delete obj._id;
@@ -89,14 +85,8 @@ exports.update_user = (id, new_data) => {
             user_settings.insert(insert, id).catch(e => console.log(e));
         }).catch(err => {
             if (err.message == "missing" || err.message == "deleted") {
-                user_settings.insert(new_data, id).then(out => {
-                    let {rev, id} = out
-                    let insert = extend({
-                        _rev: rev,
-                        _id: id
-                    }, new_data)
-                    resolve(insert);
-                }).catch(err => console.log(err));
+                user_settings.insert({}, id).catch()
+                this.update_user(id, new_data).catch();
             } else {
                 return resolve(err.message)
             }
@@ -112,7 +102,7 @@ exports.get_user = (id) => {
         }).catch(err => {
             if (err.message == "missing" || err.message == "deleted") {
                 user_settings.insert({}, id).then(out => {
-                    let {rev, id} = out
+                    let { rev, id } = out
                     let insert = {
                         _rev: rev,
                         _id: id
@@ -137,6 +127,8 @@ exports.user_has_voted = (id) => {
                 resolve(false);
             }
         })
+    }).catch(() => {
+        resolve(false);
     })
 }
 
@@ -163,7 +155,7 @@ exports.get_user_from_guild = (user_id, guild_id) => {
             }
         }).catch(err => {
             if (err.message == "missing" || err.message == "deleted") {
-                guild_user_levels.insert({}, guild_id);
+                guild_user_levels.insert({}, guild_id).catch();
                 resolve({});
             } else {
                 return resolve(err.message)
@@ -180,6 +172,7 @@ exports.edit_user_on_guild = (user_id, guild_id, new_data) => {
             guild_user_levels.insert(server_data, guild_id);
         }).catch(err => {
             if (err.message == "missing" || err.message == "deleted") {
+                guild_user_levels.insert({}, guild_id);
                 resolve({});
             } else {
                 return resolve(err.message)
