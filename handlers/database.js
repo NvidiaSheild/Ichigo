@@ -82,13 +82,20 @@ exports.update_user = (id, new_data) => {
             let insert = extend(obj, new_data);
             insert['_rev'] = _rev;
             insert['_id'] = _id;
-            user_settings.insert(insert, id).catch(e => console.log(e));
+            user_settings.insert(insert, id).catch(err => {
+                if (err.message == "missing" || err.message == "deleted") {
+                    user_settings.insert({}, id).catch()
+                    this.update_user(id, new_data).catch();
+                } else {
+                    return reject(err.message)
+                }
+            });
         }).catch(err => {
             if (err.message == "missing" || err.message == "deleted") {
                 user_settings.insert({}, id).catch()
                 this.update_user(id, new_data).catch();
             } else {
-                return resolve(err.message)
+                return reject(err.message)
             }
         })
     })
