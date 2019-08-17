@@ -47,7 +47,17 @@ exports.updateServer = (id, new_data) => {
             let insert = extend(obj, new_data)
             insert['_rev'] = _rev
             insert['_rev'] = response['_rev']
-            server_database.insert(insert, id).catch(err => console.log(err));
+            server_database.insert(insert, id).catch(err => {
+                if (err.message == "missing" || err.message == "deleted") {
+                    let data = extend(new_data, {
+                        "prefix": settings.default_prefix
+                    })
+                    server_database.insert(data, id);
+                    resolve(data)
+                } else {
+                    console.log(err)
+                }
+            });
             resolve(insert)
         }).catch(err => {
             if (err.message == "missing" || err.message == "deleted") {
