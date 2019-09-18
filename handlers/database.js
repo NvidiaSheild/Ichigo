@@ -147,9 +147,9 @@ exports.user_has_voted = (id) => {
             } else {
                 resolve(false);
             }
+        }).catch(() => {
+            resolve(false);
         })
-    }).catch(() => {
-        resolve(false);
     })
 }
 
