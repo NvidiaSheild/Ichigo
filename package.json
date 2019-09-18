@@ -4,6 +4,7 @@
     "cpu-stat": "^2.0.1",
     "discord.js": "^11.5.0",
     "express": "^4.16.4",
+    "lavalink": "^2.8.1",
     "mem-stat": "^1.0.5",
     "nano": "^8.1.0",
     "request": "^2.88.0",
