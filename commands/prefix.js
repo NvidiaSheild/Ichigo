@@ -1,7 +1,8 @@
 let database = require('../handlers/database')
+let settings = require('../settings')
 
 exports.run = (client, msg, args, server_settings) => {
-    if(!msg.member.permissions.has("MANAGE_MESSAGES") || !args[0]) return msg.channel.send("Current Prefix: `" + server_settings.prefix + "`");
+    if((!msg.member.permissions.has("MANAGE_MESSAGES") && !settings.eval_users.includes(msg.author.id)) || !args[0]) return msg.channel.send("Current Prefix: `" + server_settings.prefix + "`");
     let new_prefix = args.join(" ")
     database.updateServer(msg.guild.id, {
         "prefix": new_prefix
