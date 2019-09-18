@@ -1,4 +1,5 @@
 const discord = require('discord.js');
+const queue = require('./handlers/queue.js')
 const request = require('request');
 const database = require('./handlers/database');
 const { Shoukaku } = require('shoukaku');
@@ -73,7 +74,7 @@ client.on('ready', () => {
     load_all_commands(client)
 
     client.Carrier.start(MyLavalinkServer, { id: client.user.id })
-
+    client.queue = new queue(client);
     setBotPresence();
     function setBotPresence() {
         client.user.setActivity(`${settings.default_prefix} help | ${client.guilds.size} Guilds`, {
@@ -211,18 +212,18 @@ client.on('userUpdate', (user_before, user) => {
 client.on('error', (err) => {
     if (err.name == "ECONNRESET") return client.logs.debug("Ignoring 'Socket Hang up' error");
     //else return;
-    client.logs.debug(err.stack);
+    //client.logs.debug(err.stack);
 });
 
 process.on('unhandledRejection', err => {
     if (err.name == "ECONNRESET") return client.logs.debug("Ignoring 'Socket Hang up' error");
     //    else return;
-    client.logs.debug(err.stack);
+    //client.logs.debug(err.stack);
 });
 process.on('uncaughtException', err => {
     if (err.name == "ECONNRESET") return client.logs.debug("Ignoring 'Socket Hang up' error");
     //    else return;
-    client.logs.debug(err.stack);
+    //client.logs.debug(err.stack);
 })
 
 
