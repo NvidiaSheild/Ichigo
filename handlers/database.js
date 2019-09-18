@@ -38,6 +38,7 @@ exports.getServer = (id) => {
  * @param new_data data to be pushed to the database
  */
 exports.updateServer = (id, new_data) => {
+    //console.log(`Updating ${id} with [ ${JSON.stringify(new_data)} ]`)
     return new Promise((resolve, reject) => {
         server_database.get(id).then(response => {
             let _rev = response['_rev']
@@ -83,6 +84,7 @@ exports.get_user_votes = (id) => {
 }
 
 exports.update_user = (id, new_data) => {
+    //console.log(`Updating ${id} with [ ${JSON.stringify(new_data)} ]`)
     return new Promise((resolve, reject) => {
         user_settings.get(id).then(response => {
             let { _rev, _id } = response;
@@ -94,16 +96,18 @@ exports.update_user = (id, new_data) => {
             insert['_id'] = _id;
             user_settings.insert(insert, id).catch(err => {
                 if (err.message == "missing" || err.message == "deleted") {
-                    user_settings.insert({}, id).catch()
-                    this.update_user(id, new_data).catch();
+                    user_settings.insert({}, id).then(out => {
+                        this.update_user(id, new_data).catch();
+                    }).catch()
                 } else {
                     return reject(err.message)
                 }
             });
         }).catch(err => {
             if (err.message == "missing" || err.message == "deleted") {
-                user_settings.insert({}, id).catch()
-                this.update_user(id, new_data).catch();
+                user_settings.insert({}, id).finally(out => {
+                    this.update_user(id, new_data).catch();
+                }).catch()
             } else {
                 return reject(err.message)
             }
@@ -125,7 +129,7 @@ exports.get_user = (id) => {
                         _id: id
                     }
                     resolve(insert);
-                }).catch(err => console.log(err));;
+                }).catch();;
             } else {
                 return resolve(err.message)
             }
@@ -182,6 +186,7 @@ exports.get_user_from_guild = (user_id, guild_id) => {
 };
 
 exports.edit_user_on_guild = (user_id, guild_id, new_data) => {
+    //console.log(`Updating ${user_id} on ${guild_id} with [ ${JSON.stringify(new_data)} ]`)
     return new Promise((resolve, reject) => {
         guild_user_levels.get(guild_id).then(response => {
             let server_data = response;
@@ -189,10 +194,10 @@ exports.edit_user_on_guild = (user_id, guild_id, new_data) => {
             guild_user_levels.insert(server_data, guild_id);
         }).catch(err => {
             if (err.message == "missing" || err.message == "deleted") {
-                guild_user_levels.insert({}, guild_id);
+                guild_user_levels.insert({}, guild_id).catch();
                 resolve({});
             } else {
-                return resolve(err.message)
+                return reject(err.message)
             }
         })
     })

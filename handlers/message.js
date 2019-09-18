@@ -6,11 +6,11 @@ let database = require('./database')
 exports.handle = (client, msg, server_settings) => {
     if (msg.author.bot) return;
     let cleaned_content = msg.content.replace(/[ ]+/g, " ")
-    let prefix = cleaned_content.split(" ")[0].toLowerCase();
+    let prefix = cleaned_content.substr(0, server_settings.prefix.length);
     let server_prefix = server_settings.prefix.toLowerCase();
-    if (cleaned_content.split(" ")[0].toLowerCase() == server_settings.prefix.toLowerCase()) {
+    if (cleaned_content.substr(0, server_settings.prefix.length).toLowerCase() == server_settings.prefix.toLowerCase()) {
         let command_name = cleaned_content.substr(server_settings.prefix.length).trim().split(" ")[0].toLowerCase()
-        let args = cleaned_content.split(" ").splice(2)
+        let args = cleaned_content.substr(server_settings.prefix.length).trim().split(" ").splice(1)
         command.fetch(command_name).then(cmd => {
             try {
                 if (settings.vote_lock && cmd.info.votelocked) {

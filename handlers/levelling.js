@@ -63,7 +63,7 @@ exports.handle_global = (guild, user) => {
                         discrim: user.discriminator,
                         avatar: user.avatar
                     })
-                    
+
                 }
             }
         }).finally(() => {
@@ -91,7 +91,7 @@ exports.handle_guild = (msg, guild, user) => {
                     let user_xp = _user.current_xp;
                     let last_xp = _user.last_gained_xp - Date.now();
                     let xp_boost = _user.xp_boost ? _user.xp_boost : false;
-                    if (last_xp < -60000) {
+                    if (last_xp < - 60000) {
                         let xp_to_give;
                         let level = _user.level;
                         let current_xp_total;
@@ -134,9 +134,9 @@ exports.handle_guild = (msg, guild, user) => {
                         })
                     }
                 }
+            }).finally(() => {
+                resolve(true)
             })
-        }).finally(() => {
-            resolve(true)
         })
     })
 }
