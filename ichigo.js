@@ -76,11 +76,10 @@ client.on('ready', () => {
 
     setBotPresence();
     function setBotPresence() {
-        client.user.setPresence({
-            "game": {
-                "name": `${settings.default_prefix} help | Shard ${client.shard.id} [${client.guilds.size}]`
-            }
-        }).finally(() => {
+        client.user.setActivity(`${settings.default_prefix} help | ${client.guilds.size} Guilds`, {
+            type: "WATCHING"
+        }
+    ).finally(() => {
             setTimeout(setBotPresence, 15000);
         });
     }
