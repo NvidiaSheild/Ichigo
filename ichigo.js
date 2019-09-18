@@ -1,4 +1,5 @@
 const discord = require('discord.js');
+const { Node } = require('lavalink');
 const request = require('request');
 const database = require('./handlers/database');
 const message_handler = require('./handlers/message');
@@ -184,16 +185,34 @@ client.on('userUpdate', (user_before, user) => {
 
 client.on('error', (err) => {
     if (err.name == "ECONNRESET") return client.logs.debug("Ignoring 'Socket Hang up' error");
-    client.logs.debug(err.stack);
+    else return;
+    // client.logs.debug(err.stack);
 });
 
 process.on('unhandledRejection', err => {
     if (err.name == "ECONNRESET") return client.logs.debug("Ignoring 'Socket Hang up' error");
-    client.logs.debug(err.stack)
+    else return;
+    // client.logs.debug(err.stack);
 });
 process.on('uncaughtException', err => {
     if (err.name == "ECONNRESET") return client.logs.debug("Ignoring 'Socket Hang up' error");
-    client.logs.debug(err.stack)
+    else return;
+    // client.logs.debug(err.stack);
 })
+
+client.voice = new Node({
+    password: settings.LLPass, // your Lavalink password
+    userID: '575977933492191232', // the user ID of your bot
+    host: 'ws://' + settings.LLHost,
+    send(guildID, packet) {
+        if (client.guilds.has(guildID)) return client.ws.send(packet);
+        throw new Error('attempted to send a packet on the wrong shard');
+    }
+});
+
+client.on('raw', pk => {
+    if (pk.t === 'VOICE_STATE_UPDATE') client.voice.voiceStateUpdate(pk.d);
+    if (pk.t === 'VOICE_SERVER_UPDATE') client.voice.voiceServerUpdate(pk.d);
+});
 
 client.login();
