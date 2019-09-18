@@ -1,4 +1,4 @@
-let RichEmbed = require('discord.js').RichEmbed
+let MessageEmbed = require('discord.js').MessageEmbed
 
 function secondsToYmdhms(d) {
     d = Number(d);
@@ -26,7 +26,7 @@ exports.run  = (client, msg, args) => {
         id = args[0].replace(/[<@!>]+/g, "");
     }
     client.fetchUser(id).then(user => {
-        let embed = new RichEmbed()
+        let embed = new MessageEmbed()
         .setThumbnail(msg.author.avatarURL)
         .addField("User Information:", `
 **Username**: \`${user.username}\`

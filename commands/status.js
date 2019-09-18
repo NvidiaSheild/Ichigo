@@ -38,7 +38,7 @@ exports.run = (client, msg) => {
                 client.shard.broadcastEval('Math.floor(process.uptime())').then(uptimes => {
                     memusagemb = memusage.map(mem => (mem.heapUsed / (1024 * 1024)).toFixed(1))
                     generate_message(client, shard_ids, guild_sizes, memusagemb, uptimes, 2).then(output => {
-                        let embed = new discord.RichEmbed().setColor('#7289da')
+                        let embed = new discord.MessageEmbed().setColor('#7289da')
                         let mem = memstat.allStats('MiB')
                         let cpu = cpustat.usagePercent({sampleMs: 200}, (err, percent, seconds) => {
                             output.map(shard => {

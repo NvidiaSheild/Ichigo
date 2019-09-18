@@ -1,4 +1,4 @@
-let DiscordEmbed = require('discord.js').RichEmbed
+let DiscordEmbed = require('discord.js').MessageEmbed
 
 exports.run = (client, msg, args, server_settings) => {
     let embed = new DiscordEmbed()

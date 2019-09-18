@@ -1,5 +1,5 @@
 const fs = require('fs')
-const RichEmbed = require('discord.js').RichEmbed
+const MessageEmbed = require('discord.js').MessageEmbed
 
 exports.run = (client, msg, args, server_settings) => {
     let help_catagory = args[0]
@@ -10,7 +10,7 @@ exports.run = (client, msg, args, server_settings) => {
         command_files = fs.readdirSync(`${process.cwd()}/commands/`).map(command => command.split(".")[0])
         if(command_files.includes(help_catagory)) {
             let cmd_info = require(`${process.cwd()}/commands/${help_catagory}.js`).info
-            let embed = new RichEmbed().addField("Command Name", cmd_info.name).addField("Command Decription", cmd_info.description).addField("Command Example", `\`\`\`${server_settings.prefix} ${cmd_info.example} \`\`\``)
+            let embed = new MessageEmbed().addField("Command Name", cmd_info.name).addField("Command Decription", cmd_info.description).addField("Command Example", `\`\`\`${server_settings.prefix} ${cmd_info.example} \`\`\``)
             return msg.channel.send(embed)
         } else {
             let numbers = require('fs').readdirSync(`${process.cwd()}/commands/`).map(command => command.split(".")[0]).map(command_name => command_name.length); 

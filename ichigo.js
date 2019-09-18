@@ -1,7 +1,7 @@
 const discord = require('discord.js');
-const { Node } = require('lavalink');
 const request = require('request');
 const database = require('./handlers/database');
+const { Shoukaku } = require('shoukaku');
 const message_handler = require('./handlers/message');
 const levelling_handler = require('./handlers/levelling');
 const load_all_commands = require('./handlers/command').load_all;
@@ -44,9 +44,35 @@ client.on('message', (msg) => {
 
 })
 
+const MyLavalinkServer = [
+    {
+        name: 'Timos_Generous_Gift',
+        host: settings.LLHost,
+        port: 3000,
+        auth: settings.LLPass
+    }
+];
+client.Carrier = new Shoukaku(client, {
+    resumable: false,
+    resumableTimeout: 30,
+    reconnectTries: 2,
+    restTimeout: 10000
+});
+
+// Listeners you can use for Shoukaku
+client.Carrier.on('ready', (name) => client.logs.debug(`Lavalink Node: ${name} is now connected`));
+// Error must be handled
+client.Carrier.on('error', (name, error) => client.logs.debug(`Lavalink Node: ${name} emitted an error.`, error));
+// Close emits when a lavalink node disconnects.
+client.Carrier.on('close', (name, code, reason) => client.logs.debug(`Lavalink Node: ${name} closed with code ${code}. Reason: ${reason || 'No reason'}`));
+// Disconnected emits when a lavalink node disconnected and will not try to reconnect again.
+client.Carrier.on('disconnected', (name, reason) => client.logs.debug(`Lavalink Node: ${name} disconnected. Reason: ${reason || 'No reason'}`));
+
 client.on('ready', () => {
     client.logs.info(`Shard ${client.shard.id} Ready`);
     load_all_commands(client)
+
+    client.Carrier.start(MyLavalinkServer, { id: client.user.id })
 
     setBotPresence();
     function setBotPresence() {
@@ -104,7 +130,7 @@ client.on('guildCreate', (guild) => {
             users++
         }
     })
-    let embed = new discord.RichEmbed()
+    let embed = new discord.MessageEmbed()
         .setThumbnail(guild.iconURL)
         .addField(`Joined Guild:`, `${guild.name}`)
         .addField(`Total Members:`, `${guild.memberCount} Members (${bots} Bots) (${users} Humans)`)
@@ -128,7 +154,7 @@ client.on('guildDelete', guild => {
             users++
         }
     })
-    let embed = new discord.RichEmbed()
+    let embed = new discord.MessageEmbed()
         .setThumbnail(guild.iconURL)
         .addField(`Left Guild:`, `${guild.name}`)
         .addField(`Total Members:`, `${guild.memberCount} Members (${bots} Bots) (${users} Humans)`)
@@ -185,34 +211,21 @@ client.on('userUpdate', (user_before, user) => {
 
 client.on('error', (err) => {
     if (err.name == "ECONNRESET") return client.logs.debug("Ignoring 'Socket Hang up' error");
-    else return;
-    // client.logs.debug(err.stack);
+    //else return;
+    client.logs.debug(err.stack);
 });
 
 process.on('unhandledRejection', err => {
     if (err.name == "ECONNRESET") return client.logs.debug("Ignoring 'Socket Hang up' error");
-    else return;
-    // client.logs.debug(err.stack);
+    //    else return;
+    client.logs.debug(err.stack);
 });
 process.on('uncaughtException', err => {
     if (err.name == "ECONNRESET") return client.logs.debug("Ignoring 'Socket Hang up' error");
-    else return;
-    // client.logs.debug(err.stack);
+    //    else return;
+    client.logs.debug(err.stack);
 })
 
-client.voice = new Node({
-    password: settings.LLPass, // your Lavalink password
-    userID: '575977933492191232', // the user ID of your bot
-    host: 'ws://' + settings.LLHost,
-    send(guildID, packet) {
-        if (client.guilds.has(guildID)) return client.ws.send(packet);
-        throw new Error('attempted to send a packet on the wrong shard');
-    }
-});
 
-client.on('raw', pk => {
-    if (pk.t === 'VOICE_STATE_UPDATE') client.voice.voiceStateUpdate(pk.d);
-    if (pk.t === 'VOICE_SERVER_UPDATE') client.voice.voiceServerUpdate(pk.d);
-});
 
 client.login();

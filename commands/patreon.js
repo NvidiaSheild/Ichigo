@@ -2,7 +2,7 @@ let discord = require('discord.js')
 
 exports.run = (client, msg, args, server_settings) => {
     //Set the embed description
-    let embed = new discord.RichEmbed().setDescription("[Patreon Link](https://www.patreon.com/Discord_Ichigo)")
+    let embed = new discord.MessageEmbed().setDescription("[Patreon Link](https://www.patreon.com/Discord_Ichigo)")
     //Send embed
     return msg.channel.send(embed)
 }

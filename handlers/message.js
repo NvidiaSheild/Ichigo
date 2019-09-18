@@ -16,7 +16,7 @@ exports.handle = (client, msg, server_settings) => {
                 if (settings.vote_lock && cmd.info.votelocked) {
                     database.user_has_voted(msg.author.id).then(bool => {
                         if (bool == false || bool == "false") {
-                            let embed = new discord.RichEmbed().addField("You are required to vote to use this command.", "[Click here to be taken to the vote page.](https://discordbots.org/bot/575977933492191232/vote)").setColor('#7289da')
+                            let embed = new discord.MessageEmbed().addField("You are required to vote to use this command.", "[Click here to be taken to the vote page.](https://discordbots.org/bot/575977933492191232/vote)").setColor('#7289da')
                             return msg.channel.send(embed)
                         } else {
                             cmd.run(client, msg, args, server_settings)
@@ -42,7 +42,7 @@ exports.handle = (client, msg, server_settings) => {
                                 if (settings.vote_lock && cmd.info.votelocked) {
                                     database.user_has_voted(msg.author.id).then(bool => {
                                         if (bool == false || bool == "false") {
-                                            let embed = new discord.RichEmbed().addField("You are required to vote to use this command.", "[Click here to be taken to the vote page.](https://discordbots.org/bot/575977933492191232/vote)").setColor('#7289da')
+                                            let embed = new discord.MessageEmbed().addField("You are required to vote to use this command.", "[Click here to be taken to the vote page.](https://discordbots.org/bot/575977933492191232/vote)").setColor('#7289da')
                                             return msg.channel.send(embed)
                                         } else {
                                             cmd.run(client, msg, args, server_settings)
@@ -65,13 +65,13 @@ exports.handle = (client, msg, server_settings) => {
     else if (cleaned_content.split(" ")[0] == `<@${client.user.id}>` || cleaned_content.split(" ")[0] == `<@!${client.user.id}>`) {
         let command_name = cleaned_content.split(" ")[1]
         let args = cleaned_content.trim().split(" ").splice(2)
-        let voteembed = new discord.RichEmbed().addField("Want to support the bot?", "[Vote for Ichigo](https://discordbots.org/bot/575977933492191232/vote)\n[Pledge on Patreon](https://www.patreon.com/Discord_Ichigo)").setColor('#7289da')
+        let voteembed = new discord.MessageEmbed().addField("Want to support the bot?", "[Vote for Ichigo](https://discordbots.org/bot/575977933492191232/vote)\n[Pledge on Patreon](https://www.patreon.com/Discord_Ichigo)").setColor('#7289da')
         command.fetch(command_name).then(cmd => {
             try {
                 if (settings.vote_lock && cmd.info.votelocked) {
                     database.user_has_voted(msg.author.id).then(bool => {
                         if (bool == false || bool == "false") {
-                            let embed = new discord.RichEmbed().addField("You are required to vote to use this command.", "[Click here to be taken to the vote page.](https://discordbots.org/bot/575977933492191232/vote)").setColor('#7289da')
+                            let embed = new discord.MessageEmbed().addField("You are required to vote to use this command.", "[Click here to be taken to the vote page.](https://discordbots.org/bot/575977933492191232/vote)").setColor('#7289da')
                             return msg.channel.send(embed)
                         } else {
                             cmd.run(client, msg, args, server_settings)
@@ -96,7 +96,7 @@ exports.handle = (client, msg, server_settings) => {
                             if (settings.vote_lock && cmd.info.votelocked) {
                                 database.user_has_voted(msg.author.id).then(bool => {
                                     if (bool == false || bool == "false") {
-                                        let embed = new discord.RichEmbed().addField("You are required to vote to use this command.", "[Click here to be taken to the vote page.](https://discordbots.org/bot/575977933492191232/vote)").setColor('#7289da')
+                                        let embed = new discord.MessageEmbed().addField("You are required to vote to use this command.", "[Click here to be taken to the vote page.](https://discordbots.org/bot/575977933492191232/vote)").setColor('#7289da')
                                         return msg.channel.send(embed)
                                     } else {
                                         cmd.run(client, msg, args, server_settings)

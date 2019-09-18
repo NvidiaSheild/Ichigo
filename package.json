@@ -2,12 +2,12 @@
   "dependencies": {
     "color-logs": "^0.6.1",
     "cpu-stat": "^2.0.1",
-    "discord.js": "^11.5.0",
+    "discord.js": "git+https://github.com/discordjs/discord.js.git",
     "express": "^4.16.4",
-    "lavalink": "^2.8.1",
     "mem-stat": "^1.0.5",
     "nano": "^8.1.0",
     "request": "^2.88.0",
+    "shoukaku": "^1.0.0",
     "zalgolize": "^1.2.4"
   }
 }

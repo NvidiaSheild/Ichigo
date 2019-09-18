@@ -1,5 +1,5 @@
 let database = require('./database');
-let RichEmbed = require('discord.js').RichEmbed;
+let MessageEmbed = require('discord.js').MessageEmbed;
 
 let randomNum = (min, max) => { // min and max included
     return Math.floor(Math.random() * (max - min + 1) + min);
@@ -38,7 +38,7 @@ exports.handle_global = (guild, user) => {
                         level++
                         database.getServer(guild.id).then(server_data => {
                             if (server_data.leveldms == true && _user_settings.leveldms == undefined || server_data.leveldms == true && _user_settings.leveldms == true || server_data.leveldms == false && _user_settings.leveldms == true) {
-                                let embed = new RichEmbed()
+                                let embed = new MessageEmbed()
                                     .setAuthor(`GLOBAL`)
                                     .addField(`You Levelled up Globally!`, `You levelled up to level ${level}`)
                                     .addField("Want to level up faster?", "[Consider Voting, You get a 12 hour XP boost](https://discordbots.org/bot/575977933492191232/vote)")
@@ -107,7 +107,7 @@ exports.handle_guild = (msg, guild, user) => {
                             level++
                             database.getServer(msg.guild.id).then(server_data => {
                                 if (server_data.leveldms == true && _user_settings.leveldms == undefined || server_data.leveldms == true && _user_settings.leveldms == true || server_data.leveldms == false && _user_settings.leveldms == true) {
-                                    let embed = new RichEmbed()
+                                    let embed = new MessageEmbed()
                                         .setAuthor(guild.name, guild.iconURL)
                                         .addField(`You Levelled up in ${guild.name}!`, `You levelled up to level ${level}`)
                                         .addField("Want to level up faster?", "[Consider Voting, You get a 12 hour XP boost](https://discordbots.org/bot/575977933492191232/vote)")

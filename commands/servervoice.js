@@ -2,7 +2,7 @@ let discord = require('discord.js');
 
 exports.run = (client, msg, args, server_settings) => {
     let channels = msg.guild.channels.filter(ch => ch.type == 'voice');
-    let embed = new discord.RichEmbed()
+    let embed = new discord.MessageEmbed()
     let output = "";
     channels.forEach(chan => {
         output += `[${chan.name}](https://discordapp.com/channels/${msg.guild.id}/${chan.id})\n`

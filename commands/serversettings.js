@@ -1,7 +1,7 @@
 let discord = require('discord.js')
 
 exports.run = (client, msg, args, server_settings) => {
-        let embed = new discord.RichEmbed();
+        let embed = new discord.MessageEmbed();
         embed.addField("Prefix", server_settings.prefix);
         if (server_settings.modlog) {
                 embed.addField("Modlog", `<#${JSON.parse(server_settings).modlog}>`)
