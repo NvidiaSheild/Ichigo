@@ -29,7 +29,7 @@ exports.run = (client, msg, args, server_settings) => {
     if(Number.parseInt(args[0]) > 200) return msg.channel.send(errorEmbed("Value must be a number between 0 -> 200"));
     let num = args[0];
     client.Carrier.getPlayer(msg.guild.id).setVolume(num).then(() => {
-        return msg.channel.send(embed(num))
+        return msg.channel.send(setVolumeEmbed(num))
     })
 
 }
