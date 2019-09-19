@@ -25,7 +25,7 @@ exports.run  = (client, msg, args) => {
     } else {
         id = args[0].replace(/[<@!>]+/g, "");
     }
-    client.fetchUser(id).then(user => {
+    client.users.fetch(id).then(user => {
         let embed = new MessageEmbed()
         .setThumbnail(msg.author.avatarURL)
         .addField("User Information:", `
