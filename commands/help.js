@@ -4,7 +4,7 @@ const RichEmbed = require('discord.js').RichEmbed
 exports.run = (client, msg, args, server_settings) => {
     let help_catagory = args[0]
     if(!help_catagory) {
-        msg.channel.send(`Available Catagories:\n\`\`\`prolog\n[Basic]: Commands the basic user can use\n[Moderator]: Commands for moderation\n[Admin]: Commands to alter the settings for the bot\`\`\``)
+        msg.channel.send(`Available Categories:\n\`\`\`prolog\n[Basic]: Commands the basic user can use\n[Moderator]: Commands for moderation\n[Admin]: Commands to alter the settings for the bot\`\`\``)
     } else {
         /* I don't even remember how the fuck I conjured this up */
         command_files = fs.readdirSync(`${process.cwd()}/commands/`).map(command => command.split(".")[0])
