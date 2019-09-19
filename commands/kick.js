@@ -3,6 +3,7 @@ const discord = require('discord.js')
 exports.run = (client, msg, args, server_settings) => {
     if(!msg.guild.member(client.user.id).permissions.has("KICK_MEMBERS")) return msg.channel.send("I don't have permission to do this.");
     if(!msg.guild.member(msg.author.id).permissions.has("KICK_MEMBERS")) return msg.channel.send("You don't have permission to do this.");
+    if(!args) return msg.channel.send("Please provide a user.");
     id_to_kick = args[0].replace("/[<@!>]/g", "")
     reason = args.splice(1).join(" ") | `Kicked by ${msg.author.tag}`
     msg.guild.fetchMember(id_to_kick).then(member => {

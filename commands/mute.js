@@ -2,6 +2,7 @@
 exports.run = (client, msg, args, server_settings) => {
     if(!msg.guild.member(client.user.id).permissions.has("MANAGE_ROLES")) return msg.channel.send("I don't have permission to do this.");
     if(!msg.guild.member(msg.author.id).permissions.has("MANAGE_ROLES")) return msg.channel.send("You don't have permission to do this.");
+    if(!args) return msg.channel.send("Please provide a user.");
     let id_to_mute = args[0].replace(/[<@!>]/g, "")
     let reason = args.splice(1).join(" ")
     if (reason == "") {
