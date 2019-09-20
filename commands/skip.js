@@ -1,5 +1,13 @@
 exports.run = (client, msg, args, server_settings) => {
-    if (!msg.member.voice) return msg.channel.send("You must be in a voice channel to use this command");
+    let errorEmbed = {
+        embed: {
+            title: "Error",
+            description: "`You must be in the same voice channel as me to use that command.`",
+            color: 0x7289da
+        }
+    }
+    if (!msg.member.voice.channelID) return msg.channel.send(errorEmbed)
+    if (msg.member.voice.channelID !== msg.guild.me.voice.channelID) return msg.channel.send(errorEmbed);
     client.Carrier.getPlayer(msg.guild.id).stopTrack().then(() => {
         return msg.channel.send({
             embed: {

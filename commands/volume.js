@@ -18,7 +18,8 @@ exports.run = (client, msg, args, server_settings) => {
         }
     }
     if (msg.author.id !== "116930717241311236") return msg.channel.send(`in dev`);
-    if (!msg.member.voice) return msg.channel.send(errorEmbed("You must be in a voice channel to use this command"));
+    if (!msg.member.voice.channelID) return msg.channel.send(errorEmbed("You must be in the same voice channel as me to use that command."))
+    if (msg.member.voice.channelID !== msg.guild.me.voice.channelID) return msg.channel.send(errorEmbed("You must be in the same voice channel as me to use that command."));
     if (args.length == 0) return msg.channel.send({
         embed: {
             title: `Current playback volume:`,

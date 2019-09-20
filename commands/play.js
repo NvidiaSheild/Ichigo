@@ -3,7 +3,14 @@ let moment = require('moment');
 
 exports.run = (client, msg, args, server_settings) => {
     client.embedColor = '#71A3BE';
-    if (!msg.member.voice) return msg.channel.send("You must be in a voice channel to use this command");
+    let errorEmbed = {
+        embed: {
+            title: "Error",
+            description: "`You must be in a voice channel to use that command.`",
+            color: 0x7289da
+        }
+    }
+    if (!msg.member.voice.channelID) return msg.channel.send(errorEmbed)
     if (!args[0]) return msg.channel.send("Please provide a link or search term")
     const node = client.Carrier.getNode();
     node.rest.resolve(args[0]).then(data => {
