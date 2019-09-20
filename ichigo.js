@@ -212,18 +212,18 @@ client.on('userUpdate', (user_before, user) => {
 client.on('error', (err) => {
     if (err.name == "ECONNRESET") return client.logs.debug("Ignoring 'Socket Hang up' error");
     //else return;
-    client.logs.debug(err.stack);
+    //client.logs.debug(err.stack);
 });
 
 process.on('unhandledRejection', err => {
     if (err.name == "ECONNRESET") return client.logs.debug("Ignoring 'Socket Hang up' error");
     //    else return;
-    client.logs.debug(err.stack);
+    //client.logs.debug(err.stack);
 });
 process.on('uncaughtException', err => {
     if (err.name == "ECONNRESET") return client.logs.debug("Ignoring 'Socket Hang up' error");
     //    else return;
-    client.logs.debug(err.stack);
+    //client.logs.debug(err.stack);
 })
 
 
