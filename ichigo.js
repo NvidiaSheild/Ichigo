@@ -5,7 +5,7 @@ const database = require('./handlers/database');
 const { Shoukaku } = require('shoukaku');
 const message_handler = require('./handlers/message');
 const levelling_handler = require('./handlers/levelling');
-const load_all_commands = require('./handlers/command').load_all;
+const load_all_commands = require('./handlers/command').loadAll;
 const auto_role = require('./handlers/auto_role');
 const settings = require('./settings.js');
 const client = new discord.Client({
@@ -70,7 +70,7 @@ client.Carrier.on('close', (name, code, reason) => client.logs.debug(`Lavalink N
 client.Carrier.on('disconnected', (name, reason) => client.logs.debug(`Lavalink Node: ${name} disconnected. Reason: ${reason || 'No reason'}`));
 
 client.on('ready', () => {
-    client.logs.info(`Shard ${client.shard.id} Ready`);
+    client.logs.info(`Ichigo Ready`);
     load_all_commands(client)
 
     client.Carrier.start(MyLavalinkServer, { id: client.user.id })
@@ -212,18 +212,18 @@ client.on('userUpdate', (user_before, user) => {
 client.on('error', (err) => {
     if (err.name == "ECONNRESET") return client.logs.debug("Ignoring 'Socket Hang up' error");
     //else return;
-    //client.logs.debug(err.stack);
+    client.logs.debug(err.stack);
 });
 
 process.on('unhandledRejection', err => {
     if (err.name == "ECONNRESET") return client.logs.debug("Ignoring 'Socket Hang up' error");
     //    else return;
-    //client.logs.debug(err.stack);
+    client.logs.debug(err.stack);
 });
 process.on('uncaughtException', err => {
     if (err.name == "ECONNRESET") return client.logs.debug("Ignoring 'Socket Hang up' error");
     //    else return;
-    //client.logs.debug(err.stack);
+    client.logs.debug(err.stack);
 })
 
 

@@ -16,47 +16,49 @@ exports.handle = (client, msg, serverSettings) => {
     if (msg.author.bot || msg.channel.type === 1) return;
 
     let args = msg.content.split(/[ ]+/);
+    if (args.length == 0) return;
 
     let botMentioned = false;
-    let commandName, serverPrefix, usedPrefix;
+    let commandName = args[1];
+    let serverPrefix;
+    let usedPrefix = args[0];
 
     if (args[0] === `<@${client.user.id}>` || args[0] === `<@!${client.user.id}>`) {
-        args.shift();
         botMentioned = true;
-        commmandName = args.length === 0 ? `help` : args.shift(); // Set command to "help" if none was specified
+        if (!args[1]) {
+            commandName = "help";
+            args = [];
+        } else {
+            args = args.splice(2)
+        }
     } else {
-        let command = args.shift();
+        usedPrefix = args[0].toLowerCase();
         serverPrefix = serverSettings.prefix.toLowerCase();
-        usedPrefix = command.substring(0, serverPrefix.length).toLowerCase();
-        commmandName = command.substring(serverPrefix.length - 1);
+        args = args.splice(2)
     }
 
     if (botMentioned || usedPrefix == serverPrefix) {
-        commands.fetch(commandName).then(cmd => {
-            try {
-                if (settings.vote_lock && cmd.info.votelocked) {
-                    database.user_has_voted(msg.author.id).then(userVoted => {
-                        if (userVoted === false) {
-                            return msg.channel.send(voteLockedResponse)
-                        } else {
-                            cmd.run(client, msg, args, serverSettings)
-                        }
-                    });
-                } else {
-                    cmd.run(client, msg, args, serverSettings)
-                }
-            } catch (e) {
-                return client.logs.error(e)
+        commands.fetch(commandName.toLowerCase()).then(cmd => {
+            if (settings.vote_lock && cmd.info.votelocked) {
+                database.user_has_voted(msg.author.id).then(userVoted => {
+                    if (userVoted === false) {
+                        return msg.channel.send(voteLockedResponse)
+                    } else {
+                        cmd.run(client, msg, args, serverSettings)
+                    }
+                });
+            } else {
+                cmd.run(client, msg, args, serverSettings)
             }
         }).catch(err => {
             if (err.code === "MODULE_NOT_FOUND") {
                 // Check for custom command
-                if (server_settings.customcommands && server_settings.customcommands[command_name]) {
-                    return msg.channel.send(server_settings.customcommands[command_name])
+                if (serverSettings.customcommands && serverSettings.customcommands[commandName]) {
+                    return msg.channel.send(serverSettings.customcommands[commandName])
                 };
                 // Check for command alias
-                if (server_settings.commandaliases && server_settings.commandaliases[command_name]) {
-                    command.fetch(server_settings.commandaliases[command_name]).then(cmd => {
+                if (serverSettings.commandaliases && serverSettings.commandaliases[commandName]) {
+                    command.fetch(serverSettings.commandaliases[commandName]).then(cmd => {
                         try {
                             if (settings.vote_lock && cmd.info.votelocked) {
                                 database.user_has_voted(msg.author.id).then(userVoted => {
@@ -67,7 +69,7 @@ exports.handle = (client, msg, serverSettings) => {
                                     }
                                 });
                             } else {
-                                cmd.run(client, msg, args, server_settings)
+                                cmd.run(client, msg, args, serverSettings)
                             }
                         } catch (e) {
                             return client.logs.error(e)
