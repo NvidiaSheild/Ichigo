@@ -3,29 +3,54 @@ const MessageEmbed = require('discord.js').MessageEmbed
 
 exports.run = (client, msg, args, server_settings) => {
     let help_catagory = args[0]
-    if(!help_catagory) {
-        msg.channel.send(`Available Categories:\n\`\`\`prolog\n[Basic]: Commands the basic user can use\n[Moderator]: Commands for moderation\n[Admin]: Commands to alter the settings for the bot\`\`\``)
+    if (!help_catagory) {
+        msg.channel.send({
+            embed: {
+                title: "Available Categories:",
+                description: `**Current Server Prefix:** \`${server_settings.prefix}\`
+${server_settings.prefix} help basic
+${server_settings.prefix} help moderator
+${server_settings.prefix} help admin
+${server_settings.prefix} help music`,
+                color: 0x7289da
+            }
+        })
     } else {
         /* I don't even remember how the fuck I conjured this up */
         command_files = fs.readdirSync(`${process.cwd()}/commands/`).map(command => command.split(".")[0])
-        if(command_files.includes(help_catagory)) {
+        if (command_files.includes(help_catagory)) {
             let cmd_info = require(`${process.cwd()}/commands/${help_catagory}.js`).info
             let embed = new MessageEmbed().addField("Command Name", cmd_info.name).addField("Command Decription", cmd_info.description).addField("Command Example", `\`\`\`${server_settings.prefix} ${cmd_info.example} \`\`\``)
             return msg.channel.send(embed)
         } else {
-            let numbers = require('fs').readdirSync(`${process.cwd()}/commands/`).map(command => command.split(".")[0]).map(command_name => command_name.length); 
-            let largest = Math.max.apply(Math, numbers);
-            let output_text = "<Command>" + "<Description>\n".padStart(largest+11, " ")
+            let output = [];
+            let commands_found = false;
             let cmd_text = command_files.map(command => {
                 let cmd_info = require(`${process.cwd()}/commands/${command}`).info
                 if (!cmd_info) return;
                 if (cmd_info.type !== help_catagory) return;
-                output_text += `[${cmd_info.name.capitalize()}]`.padEnd(largest+6, " ") + `${cmd_info.description}\n`
+                commands_found = true
+                return `\`${cmd_info.name}\``
             });
-            return msg.channel.send(output_text, {split: true, code:"prolog"})
+            cmd_text.map(o => {if(o) output.push(o)})
+            if(!commands_found) return msg.channel.send({
+                embed: {
+                    title: "Error",
+                    description: "`There are no commands under that category.`"
+                }
+            })
+            return msg.channel.send({
+                embed: {
+                    description: `**Current Server Prefix:**  \`${server_settings.prefix}\`\n**${help_catagory.capitalize()} commands:**\n ${output.join(", ")}`,
+                    footer: {
+                        text: `${server_settings.prefix} help <command> for more info`,
+                    },
+                    color: 0x7289da 
+                }
+            }).catch(console.log)
         }
     }
-    
+
 }
 
 exports.info = {
