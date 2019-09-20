@@ -2,8 +2,8 @@ const discord = require('discord.js');
 const settings = require('./settings');
 const fs = require('fs');
 const app = require('express')();
-const ShardingManager = new discord.ShardingManager('./ichigo.js', options={
-    totalShards: 'auto',
+const ShardingManager = new discord.ShardingManager('./ichigo.js', options = {
+    totalShards: 4,
     respawn: true,
     token: settings.token
 })
@@ -15,16 +15,16 @@ app.get('/', (req, res) => {
 })
 
 app.get('/shards', (req, res) => {
-    let shards={}
-    ShardingManager.fetchClientValues('shard.id').then(shardids => {
-        ShardingManager.fetchClientValues('guilds.size').then(shardguilds => {
-            shardids.forEach(id => {
-                shards[id] = {"guilds": shardguilds[id]};
-            })
-            res.header({"Content-Type":"application/json"})
-            res.status(200).send(shards)
+    let shards = {}
+    shardids = ShardingManager.shards.map(s => s.id)
+    ShardingManager.fetchClientValues('guilds.size').then(shardguilds => {
+        shardids.forEach((id, val) => {
+            shards[id] = { "guilds": shardguilds[id] };
         })
+        res.header({ "Content-Type": "application/json" })
+        res.status(200).send(shards)
     })
+
 })
 
 app.get('/commands', (req, res) => {
@@ -40,7 +40,7 @@ app.get('/commands', (req, res) => {
         }
         delete require.cache[require.resolve(`./commands/${file}`)]
     });
-    res.header({"Content-Type": "application/json"}).status(200).send(commands)
+    res.header({ "Content-Type": "application/json" }).status(200).send(commands)
 })
 
 app.listen(17002, () => {
