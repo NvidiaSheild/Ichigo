@@ -1,4 +1,5 @@
 let settings = require('../settings')
+let discord = require('discord.js')
 
 const clean = text => {
     if (typeof(text) === "string")
