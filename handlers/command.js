@@ -1,23 +1,19 @@
-const fs = require('fs')
+const fs = require('fs');
 
-exports.fetch = (commandname) => {
+exports.fetch = (commandName) => {
     return new Promise((resolve, reject) => {
         try {
-            let command = require(`${process.cwd()}/commands/${commandname}.js`)
-            resolve(command)
-        } catch (e) {
-            if (e.code == "MODULE_NOT_FOUND")
-                reject("Command not found");
-            else {
-                reject(e);
-            }
+            let command = require(`${process.cwd()}/commands/${commandName}.js`);
+            resolve(command);
+        } catch (err) {
+            reject(err);
         }
-    })
+    });
 }
 
-exports.load_all = (client) => {
-    files = fs.readdirSync(`${process.cwd()}/commands/`)
-    files.forEach(file => {
-        require(`../commands/${file}`)
+exports.loadAll = () => {
+    commandDir = fs.readdirSync(`${process.cwd()}/commands/`);
+    commandDir.forEach(file => {
+        require(`../commands/${file}`);
     });
 }
