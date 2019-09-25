@@ -77,10 +77,10 @@ client.on('ready', () => {
     client.queue = new queue(client);
     setBotPresence();
     function setBotPresence() {
-        client.user.setActivity(`${settings.default_prefix} help | ${client.guilds.size} Guilds`, {
+        client.user.setActivity(`${settings.default_prefix} help`, {
             type: "WATCHING"
         }
-    ).finally(() => {
+        ).finally(() => {
             setTimeout(setBotPresence, 15000);
         });
     }
@@ -130,18 +130,22 @@ client.on('guildCreate', (guild) => {
             users++
         }
     })
-    let embed = new discord.MessageEmbed()
-        .setThumbnail(guild.iconURL)
-        .addField(`Joined Guild:`, `${guild.name}`)
-        .addField(`Total Members:`, `${guild.memberCount} Members (${bots} Bots) (${users} Humans)`)
-        .addField(`Shard ${client.shard.id}:`, `Currently in ${client.guilds.size}`)
-        .setColor('#7289da')
-    client.fetchWebhook("576013440150405140", "FzeavqiL0CHcshzTYif2PJOoaBnzToCZaS1wyiUf8YQiWX_h3iouPFna896vI1QzGccd").then(webhook => {
-        webhook.send(embed = embed)
-    })
-    client.fetchWebhook("610042274474229760", "8EJ-FMvlXT48ZwdYeVskraULxTHgQRNKlrtkYOpflcAsWoyrtl___uDNTK7xmQK-TiiY").then(webhook => {
-        webhook.send(embed = embed)
-    })
+    client.shard.fetchClientValues('guilds.size')
+        .then(results => {
+            let total_guilds = results.reduce((prev, guildCount) => prev + guildCount, 0)
+            let embed = new discord.MessageEmbed()
+                .setThumbnail(guild.iconURL)
+                .addField(`Joined Guild:`, `${guild.name}`)
+                .addField(`Total Members:`, `${guild.memberCount} Members (${bots} Bots) (${users} Humans)`)
+                .addField(`Shard ${guild.shard.id}:`, `Currently in ${client.guilds.size} [${total_guilds}] Total`)
+                .setColor('#7289da')
+            client.fetchWebhook("576013440150405140", "FzeavqiL0CHcshzTYif2PJOoaBnzToCZaS1wyiUf8YQiWX_h3iouPFna896vI1QzGccd").then(webhook => {
+                webhook.send(embed = embed)
+            })
+            client.fetchWebhook("610042274474229760", "8EJ-FMvlXT48ZwdYeVskraULxTHgQRNKlrtkYOpflcAsWoyrtl___uDNTK7xmQK-TiiY").then(webhook => {
+                webhook.send(embed = embed)
+            })
+        })
 })
 
 client.on('guildDelete', guild => {
@@ -154,18 +158,22 @@ client.on('guildDelete', guild => {
             users++
         }
     })
-    let embed = new discord.MessageEmbed()
-        .setThumbnail(guild.iconURL)
-        .addField(`Left Guild:`, `${guild.name}`)
-        .addField(`Total Members:`, `${guild.memberCount} Members (${bots} Bots) (${users} Humans)`)
-        .addField(`Shard ${client.shard.id}:`, `Currently in ${client.guilds.size}`)
-        .setColor('#7289da')
-    client.fetchWebhook("576013440150405140", "FzeavqiL0CHcshzTYif2PJOoaBnzToCZaS1wyiUf8YQiWX_h3iouPFna896vI1QzGccd").then(webhook => {
-        webhook.send(embed = embed)
-    })
-    client.fetchWebhook("610042274474229760", "8EJ-FMvlXT48ZwdYeVskraULxTHgQRNKlrtkYOpflcAsWoyrtl___uDNTK7xmQK-TiiY").then(webhook => {
-        webhook.send(embed = embed)
-    })
+    client.shard.fetchClientValues('guilds.size')
+        .then(results => {
+            let total_guilds = results.reduce((prev, guildCount) => prev + guildCount, 0)
+            let embed = new discord.MessageEmbed()
+                .setThumbnail(guild.iconURL())
+                .addField(`Left Guild:`, `${guild.name}`)
+                .addField(`Total Members:`, `${guild.memberCount} Members (${bots} Bots) (${users} Humans)`)
+                .addField(`Shard ${guild.shard.id}:`, `Currently in ${client.guilds.size} [${total_guilds}] Total`)
+                .setColor('#7289da')
+            client.fetchWebhook("576013440150405140", "FzeavqiL0CHcshzTYif2PJOoaBnzToCZaS1wyiUf8YQiWX_h3iouPFna896vI1QzGccd").then(webhook => {
+                webhook.send(embed = embed)
+            })
+            client.fetchWebhook("610042274474229760", "8EJ-FMvlXT48ZwdYeVskraULxTHgQRNKlrtkYOpflcAsWoyrtl___uDNTK7xmQK-TiiY").then(webhook => {
+                webhook.send(embed = embed)
+            })
+        })
 })
 
 client.on('disconnect', () => {
@@ -184,6 +192,14 @@ client.on('guildMemberAdd', member => {
     auto_role.handle(member.user.bot, member.guild, member, client)
 })
 
+client.reboot = (client, id) => {
+    if (client.ws.shards.get(0).id == id) {
+        client.logs.debug(`Shard ${id} restarting...`)
+        process.exit()
+    } else {
+        client.logs.debug(`Shard ${id} called to restart.`)
+    }
+}
 
 /**
  * 
