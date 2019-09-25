@@ -41,5 +41,5 @@ exports.info = {
     "name": "nowplaying",
     "type": "music",
     "description": "show the currently playing ",
-    "example": "skip"
+    "example": "nowplaying"
 }
