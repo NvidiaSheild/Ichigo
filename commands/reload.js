@@ -11,26 +11,29 @@ exports.reload = (command_to_reload) => {
 
 exports.run = (client, msg, args, server_settings) => {
     if (!settings.eval_users.includes(msg.author.id)) return;
-    try {
-        let command_to_reload = args[0]
+        if(!args) return;
+        let command_to_reload = args[0];
         let require_dir = process.cwd().replace("\\", "/").replace("\\", "/");
-        shard_ids = client.ws.shards.map(sh => sh.id)
-        client.shard.broadcastEval(`require("${require_dir}/commands/reload").reload("${command_to_reload}")`).then(results => {
-            let text = `[Shard]\t[Reloaded]\n`;
-            let out_txt = shard_ids.forEach(shard => {
-                text += `[Shard ${shard}]:\t ${results[shard]}\n`;
-            });
-            msg.channel.send(text, { split: true, code: "prolog" });
-        })
-    } catch (e) {
-        client.logs.error(e)
-        if (e.code == "MODULE_NOT_FOUND") {
-            return msg.channel.send("That command doesn't exist")
+        client.shard.fetchClientValues("ws.shards").then(shard_ids => {
+            try {
+            shard_ids = shard_ids.map(sh => sh[0].id);
+            client.shard.broadcastEval(`require("${require_dir}/commands/reload").reload("${command_to_reload}")`).then(results => {
+                let text = `[Shard]\t[Reloaded]\n`;
+                let out_txt = shard_ids.forEach(shard => {
+                    text += `[Shard ${shard}]:\t ${results[shard]}\n`;
+                });
+                msg.channel.send(text, { split: true, code: "prolog" });
+            })
+        } catch (e) {
+            client.logs.error(e)
+            if (e.code == "MODULE_NOT_FOUND") {
+                return msg.channel.send("That command doesn't exist")
 
-        } else {
-            reject(e)
+            } else {
+                reject(e)
+            }
         }
-    }
+    })
 }
 
 exports.info = {

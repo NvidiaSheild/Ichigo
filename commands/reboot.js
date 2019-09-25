@@ -1,8 +1,14 @@
 const settings = require('../settings');
 
+exports.reboot = (client, id) => {
+    if (client.ws.shards.get(0).id == id) {
+        process.exit()
+    }
+}
+
 exports.run = (client, msg, args, server_settings) => { 
     if (!settings.eval_users.includes(msg.author.id)) return;
-    process.exit()
+    client.shard.broadcastEval("process.exit()");
 }
 
 exports.info = {
