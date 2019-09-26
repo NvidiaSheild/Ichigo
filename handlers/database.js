@@ -10,7 +10,80 @@ let server_database = couch.use(`server_settings_${settings.database}`);
 let user_settings = couch.use(`user_settings`);
 let user_votes = couch.use(`user_votes`);
 let guild_user_levels = couch.use(`guild_user_levels`);
+let user_blacklist = couch.use(`user_blacklist`);
 
+
+exports.is_blacklisted = (id) => {
+    return new Promise((res, rej) => {
+        user_blacklist.get(id).then(response => {
+            res(response)
+        }).catch(err => {
+            if (err.message == "missing" || err.message == "deleted") {
+                res({active: false})
+            }
+        })
+    })
+}
+
+exports.blacklist_user = (id, reason) => {
+    return new Promise((res, rej) => {
+        let new_data = {
+            "user_id": id,
+            "reason": reason,
+            "active": true
+        }
+        user_blacklist.get(id).then(response => {
+            let _rev = response['_rev']
+            let obj = response
+            delete obj['_rev']
+            delete obj['_id']
+            let insert = extend(obj, new_data)
+            insert['_rev'] = _rev
+            insert['_rev'] = response['_rev']
+            user_blacklist.insert(insert, id).then(() => res(new_data)).catch(err => {
+                if (err.message == "missing" || err.message == "deleted") {
+                    user_blacklist.insert(new_data, id).catch()
+                    res(new_data)
+                }
+            });
+        }).catch(err => {
+            if (err.message == "missing" || err.message == "deleted") {
+                user_blacklist.insert(new_data, id).catch()
+                res(new_data)
+            }
+        })
+    })
+}
+
+exports.unblacklist_user = (id, reason) => {
+    return new Promise((res, rej) => {
+        let new_data = {
+            "user_id": id,
+            "reason": reason,
+            "active": false
+        }
+        user_blacklist.get(id).then(response => {
+            let _rev = response['_rev']
+            let obj = response
+            delete obj['_rev']
+            delete obj['_id']
+            let insert = extend(obj, new_data)
+            insert['_rev'] = _rev
+            insert['_rev'] = response['_rev']
+            user_blacklist.insert(insert, id).then(() => res(new_data)).catch(err => {
+                if (err.message == "missing" || err.message == "deleted") {
+                    user_blacklist.insert(new_data, id).catch()
+                    res(new_data)
+                }
+            });
+        }).catch(err => {
+            if (err.message == "missing" || err.message == "deleted") {
+                user_blacklist.insert(new_data, id).catch()
+                res(new_data)
+            }
+        })
+    })
+}
 
 /**
  * @param id server id
