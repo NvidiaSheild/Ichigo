@@ -39,17 +39,27 @@ exports.handle = (client, msg, serverSettings) => {
 
     if (botMentioned || usedPrefix == serverPrefix) {
         commands.fetch(commandName.toLowerCase()).then(cmd => {
-            if (settings.vote_lock && cmd.info.votelocked) {
-                database.user_has_voted(msg.author.id).then(userVoted => {
-                    if (userVoted === false) {
-                        return msg.channel.send(voteLockedResponse)
-                    } else {
-                        cmd.run(client, msg, args, serverSettings)
-                    }
-                });
-            } else {
-                cmd.run(client, msg, args, serverSettings)
-            }
+            database.is_blacklisted(msg.author.id).then(out => {
+                if (out.active == true) {
+                    return msg.channel.send({
+                        embed: {
+                            title: "You are currently blacklisted.",
+                            description: "To appeal this blacklist please join the [Support Server](https://discord.gg/34k4Mk2) to talk the blacklist over with an admin/owner",
+                            color: 0x7289da
+                        }
+                    })
+                } else if (settings.vote_lock && cmd.info.votelocked) {
+                    database.user_has_voted(msg.author.id).then(userVoted => {
+                        if (userVoted === false) {
+                            return msg.channel.send(voteLockedResponse)
+                        } else {
+                            cmd.run(client, msg, args, serverSettings)
+                        }
+                    });
+                } else {
+                    cmd.run(client, msg, args, serverSettings)
+                }
+            });
         }).catch(err => {
             if (err.code === "MODULE_NOT_FOUND") {
                 // Check for custom command
@@ -60,17 +70,27 @@ exports.handle = (client, msg, serverSettings) => {
                 if (serverSettings.commandaliases && serverSettings.commandaliases[commandName]) {
                     command.fetch(serverSettings.commandaliases[commandName]).then(cmd => {
                         try {
-                            if (settings.vote_lock && cmd.info.votelocked) {
-                                database.user_has_voted(msg.author.id).then(userVoted => {
-                                    if (userVoted === false) {
-                                        return msg.channel.send(voteLockedResponse)
-                                    } else {
-                                        cmd.run(client, msg, args, serverSettings)
-                                    }
-                                });
-                            } else {
-                                cmd.run(client, msg, args, serverSettings)
-                            }
+                            database.is_blacklisted(msg.author.id).then(out => {
+                                if (out.active == true) {
+                                    return msg.channel.send({
+                                        embed: {
+                                            title: "You are currently blacklisted.",
+                                            description: "To appeal this blacklist please join the [Support Server](https://discord.gg/34k4Mk2) to talk the blacklist over with an admin/owner",
+                                            color: 0x7289da
+                                        }
+                                    })
+                                } else if (settings.vote_lock && cmd.info.votelocked) {
+                                    database.user_has_voted(msg.author.id).then(userVoted => {
+                                        if (userVoted === false) {
+                                            return msg.channel.send(voteLockedResponse)
+                                        } else {
+                                            cmd.run(client, msg, args, serverSettings)
+                                        }
+                                    });
+                                } else {
+                                    cmd.run(client, msg, args, serverSettings)
+                                }
+                            });
                         } catch (e) {
                             return client.logs.error(e)
                         }
