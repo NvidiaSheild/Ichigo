@@ -8,6 +8,9 @@ exports.run = (client, msg, args) => {
     .setDescription(`${msg.author.tag} (${msg.author.id}) made a suggestion`)
     .addField("Suggestion:", suggestion, inline=false)
     client.guilds.get('556013291378442240').channels.get('556880171672535043').send({embed})
+    let embedtwo = new discord.MessageEmbed()
+    .setDescription("Suggestion sent")
+    return msg.channel.send(embedtwo)
 }
 
 exports.info = {
