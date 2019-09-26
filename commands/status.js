@@ -14,9 +14,9 @@ function secondsToDhms(d) {
     var mins_txt = mins.toString().padStart(2, "0")
     var secs_txt = secs.toString().padStart(2, "0")
 
-    if(days) { 
+    if (days) {
         return `${days_txt}D ${hrs_txt}H ${mins_txt}M ${secs_txt}S`;
-    } else if(hrs) {
+    } else if (hrs) {
         return `${hrs_txt}H ${mins_txt}M ${secs_txt}S`;
     } else {
         return `${mins_txt}M ${secs_txt}S`;
@@ -50,7 +50,11 @@ exports.run = (client, msg) => {
                     client.shard.broadcastEval('Math.floor(process.uptime())').then(uptimes => {
                         memusagemb = memusage.map(mem => (mem.heapUsed / (1024 * 1024)).toFixed(1))
                         generate_message(msg, client, shard_ids, guild_sizes, memusagemb, uptimes, players).then(output => {
-
+                            let lavalinkstats = client.Carrier.getNode().stats
+                            let reservableMb = Math.round(lavalinkstats.memory.reservable/1024/1024)
+                            let allocatedMb = Math.round(lavalinkstats.memory.allocated/1024/1024)
+                            let freeMb = Math.round(lavalinkstats.memory.free/1024/1024)
+                            let usedMb = Math.round(lavalinkstats.memory.used/1024/1024)
                             let embed = new discord.MessageEmbed().setColor('#7289da')
                             let mem = memstat.allStats('MiB')
                             let cpu = cpustat.usagePercent({ sampleMs: 200 }, (err, percent, seconds) => {
@@ -61,6 +65,12 @@ exports.run = (client, msg) => {
 System CPU Usage: ${Math.round(percent)}%
 System RAM Usage: ${Math.round(mem.total - mem.free)}MB (${Math.round(mem.usedPercent)}%) / ${Math.round(mem.total)}MB (100%)
 System Uptime:    ${ secondsToDhms(os.uptime())}\`\`\``)
+                                embed.addField("LavaLink Information:", `\`\`\`xl
+LavaLink Uptime: ${secondsToDhms(lavalinkstats.uptime / 1000)}
+LavaLink Used Ram: ${(usedMb + freeMb + allocatedMb)}MB
+LavaLink Usable Ram: ${reservableMb}MB
+LavaLink Current Streams: ${lavalinkstats.players} 
+\`\`\``)
                                 return msg.channel.send({ embed })
                             });
                         }).catch();
