@@ -32,7 +32,7 @@ exports.run  = (client, msg, args) => {
 **Username**: \`${user.username}\`
 **Descriminator**: \`${user.discriminator}\`
 
-**Account Created**: \`${user.createdAt.toGMTString()}\`
+**Account Created**: \`${user.createdAt.toUTCString()}\`
 **Account Created (Time)**: 
 ${secondsToYmdhms(((Date.now() - user.createdAt) / 1000))}
 `)
